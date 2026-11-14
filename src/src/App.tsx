@@ -1,13 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowUp, ArrowUpRight, Leaf, Plant, TreeEvergreen, Waves, X } from '@phosphor-icons/react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { ArrowUp } from '@phosphor-icons/react/dist/csr/ArrowUp'
+import { ArrowUpRight } from '@phosphor-icons/react/dist/csr/ArrowUpRight'
+import { Leaf } from '@phosphor-icons/react/dist/csr/Leaf'
+import { Plant } from '@phosphor-icons/react/dist/csr/Plant'
+import { TreeEvergreen } from '@phosphor-icons/react/dist/csr/TreeEvergreen'
+import { Waves } from '@phosphor-icons/react/dist/csr/Waves'
+import { X } from '@phosphor-icons/react/dist/csr/X'
 import { normalizeQuestion, questions } from './questions'
 import TerrainBackground from './components/TerrainBackground'
 import './App.css'
+const EvidenceExplorer = lazy(() => import('./components/EvidenceExplorer'))
 
 type Modal = 'about' | 'unavailable' | null
 const topicIcons = [TreeEvergreen, Waves, Plant]
 
 function App() {
+  const [route, setRoute] = useState(window.location.hash.slice(1))
+  const navigate = (path: string) => { window.location.hash = path; window.scrollTo(0, 0) }
+  useEffect(() => {
+    const update = () => setRoute(window.location.hash.slice(1))
+    window.addEventListener('hashchange', update)
+    return () => window.removeEventListener('hashchange', update)
+  }, [])
   const [question, setQuestion] = useState('')
   const [modal, setModal] = useState<Modal>(null)
   const input = useRef<HTMLTextAreaElement>(null)
@@ -29,8 +43,12 @@ function App() {
   }
 
   function submitQuestion() {
+    if (active) navigate(`${active.id}/answer`)
     if (question.trim() && !active) setModal('unavailable')
   }
+
+  const [questionId, page] = route.split('/')
+  if (questions.some(q => q.id === questionId) && ['answer', 'graph'].includes(page)) return <Suspense fallback={<main aria-live="polite">Loading evidence…</main>}><EvidenceExplorer key={questionId + page} questionId={questionId} page={page} navigate={navigate} /></Suspense>
 
   return (
     <div className="app-shell">

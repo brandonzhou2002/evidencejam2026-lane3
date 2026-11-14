@@ -73,3 +73,33 @@ export default defineConfig([
 ])
 
 ```
+
+## Local development
+
+From the repository root:
+
+```sh
+cd src
+npm ci
+npm run dev -- --host 127.0.0.1
+```
+
+Open the localhost URL printed by Vite. Select **Tree planting**, press Enter,
+then choose **Read more · Explore the graph**. Direct graph route:
+`http://localhost:5173/#q1-tree-planting/graph`.
+Hash navigation supports browser Back/Forward and static hosting.
+
+```sh
+npm run build
+cd dist
+python3 -m http.server 8000
+```
+
+The graph and quoted evidence work offline. DOI links require internet access.
+The pack contains no PDFs. To enable inline PDFs, place licensed/authorized PDF
+files in `public/papers/` and map their evidence `document_id` to a local path in
+`src/data/pdfs.json`, for example `{ "10.example/paper": "./papers/paper.pdf" }`.
+A node can have multiple papers; use the source panel's paper selector.
+Q1 uses the supplied node/edge graph; Q2 and Q3 currently have findings views.
+Installing dependencies requires internet; the competition's clean-checkout,
+network-restricted build packaging still needs to be resolved before submission.

@@ -1,0 +1,51 @@
+.explorer { min-height: 100vh; background: radial-gradient(ellipse at top right,#1e372b66,transparent 55%),#0c1111; }
+.explorer button { border: 1px solid #40594a; border-radius: 9px; background: #18291f; padding: 10px 15px; }
+.explorer button:hover { background: #294332; }
+.explorer-nav { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:24px 4%; border-bottom:1px solid #ffffff15; font-size:12px; letter-spacing:1px; color:#b2c6b9; }
+.explorer-main { display:block; max-width:1700px; margin:auto; padding:40px 4% 60px; }
+.explorer h1 { text-align:left; white-space:normal; font-size:clamp(30px,4vw,52px); margin:12px 0 20px; }
+.eyebrow { color:var(--mint); text-transform:uppercase; letter-spacing:2px; font-size:11px; }
+.explorer-question { max-width:1000px; color:#bdcbc3; line-height:1.7; font-size:16px; }
+.brief { background:#14231c; border:1px solid #ffffff17; padding:24px; border-radius:14px; margin:28px 0; line-height:1.7; }
+.brief h2,.relationship-list h2 { font-size:23px; }
+.explorer summary { cursor:pointer; }
+.table-scroll { overflow:auto; border:1px solid #34483c; border-radius:12px; }
+.explorer table { width:100%; border-collapse:collapse; min-width:720px; font-size:14px; }
+.explorer caption { text-align:left; padding:20px; color:var(--mint); }
+.explorer th,.explorer td { padding:16px; text-align:left; border-top:1px solid #34483c; vertical-align:top; }
+.explorer th { color:#b8cbc0; background:#16261e; }
+.explorer td details { max-width:360px; }
+.next-page { display:flex; justify-content:flex-end; margin:24px 0; }
+.explorer button.primary { background:var(--mint); color:#12271e; padding:17px 24px; }
+.graph-toolbar { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:30px; }
+.graph-toolbar p { flex:1; font-size:13px; color:#b2c6b9; }
+.graph-caution { color:#c4c6aa; background:#b7a6580c; border-left:2px solid #bbad72; padding:12px 16px; line-height:1.6; font-size:13px; }
+.graph-workspace { display:grid; grid-template-columns:minmax(0,1fr); gap:20px; align-items:start; }
+.graph-workspace.with-panel { grid-template-columns:minmax(0,1fr) 380px; }
+.graph-card { min-width:0; border:1px solid #34483c; border-radius:16px; overflow:hidden; background:#101c16; }
+.graph-scroll { overflow:auto; max-height:680px; background-image:radial-gradient(#a4edc81a 1px,transparent 1px); background-size:22px 22px; }
+.column-label { fill:#a5b9ae; font-size:12px; letter-spacing:1px; }
+.graph-node,.graph-edge { cursor:pointer; }
+.graph-node:focus,.graph-edge:focus { outline:none; }
+.graph-node:focus rect,.graph-node:hover rect { stroke:#fff; stroke-width:3; }
+.graph-edge:focus circle,.graph-edge:hover circle { stroke:#fff; stroke-width:3; }
+.relationship-list { padding:24px; }
+.relationship-list p { color:#bacbbf; font-size:13px; line-height:1.6; }
+.relationship-list button { width:100%; display:grid; grid-template-columns:28px 1fr 100px 155px; gap:10px; align-items:center; text-align:left; margin:6px 0; font-size:12px; line-height:1.5; }
+.relationship-list button[aria-pressed=true] { border-color:var(--mint); background:#2a4435; }
+.edge-number { color:var(--mint); }
+.evidence-panel { position:sticky; top:15px; max-height:calc(100vh - 30px); overflow:auto; padding:24px; background:#18271f; border:1px solid #506b59; border-radius:16px; }
+.panel-heading { display:flex; justify-content:space-between; align-items:center; }
+.evidence-panel h2 { font-size:25px; line-height:1.3; margin-top:15px; }
+.evidence-panel h3 { font-size:16px; line-height:1.5; }
+.evidence-panel p,.evidence-panel details { font-size:13px; line-height:1.6; color:#c6d4cb; }
+.evidence-panel details { padding:10px 0; border-bottom:1px solid #ffffff15; }
+.evidence-panel label { display:block; margin:24px 0 10px; font-size:12px; color:var(--mint); }
+.evidence-panel select { width:100%; padding:10px; background:#0d1912; color:#ecf3ef; border:1px solid #506b59; border-radius:8px; }
+.explorer a { color:var(--mint); }
+.explorer blockquote { margin:18px 0; padding:14px; border-left:2px solid #a4edc8; background:#ffffff04; font-size:14px; line-height:1.7; }
+.explorer cite { display:block; margin-top:12px; font-size:11px; color:#adbbaf; }
+.pdf-note { padding:12px; background:#ffffff05; border-radius:8px; }
+.pdf-viewer { width:100%; height:550px; border:0; margin-top:18px; }
+@media(max-width:1000px) { .graph-workspace.with-panel { grid-template-columns:minmax(0,1fr); }.evidence-panel { position:static; max-height:none; grid-row:1; }.explorer-nav span:last-child{display:none;} }
+@media(max-width:600px) { .relationship-list {padding:12px;}.relationship-list button {grid-template-columns:24px 1fr;}.relationship-list button span:nth-child(n+3){grid-column:2;}.explorer-nav{font-size:10px;}.explorer-main{padding-top:25px;} }
