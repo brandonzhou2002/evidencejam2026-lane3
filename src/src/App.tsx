@@ -80,7 +80,7 @@ function App() {
           </div>
         </div>
       </main>
-      <footer className="site-footer"><span>Evidence Jam <span className="footer-year">2026</span></span></footer>
+      <footer className="site-footer"><span>Evidence Jam <span className="footer-year">2026</span> · By Random Team</span></footer>
       <dialog ref={dialog} className="info-dialog" aria-labelledby="dialog-title" onCancel={() => setModal(null)} onClose={() => setModal(null)} onClick={(event) => { if (event.target === event.currentTarget) setModal(null) }}>
         <div className="dialog-content">
           <button className="close-button" aria-label="Close dialog" onClick={() => setModal(null)}><X size={21} aria-hidden="true" /></button>

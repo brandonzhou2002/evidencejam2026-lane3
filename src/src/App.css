@@ -23,7 +23,7 @@ textarea::placeholder { color: #a8b5af; opacity: 1; }
 .topic-button:hover { border-color: #a4edc866; background: #182520c4; transform: translateY(-2px); }
 .topic-button.selected { background: #1c3026d9; border-color: #a4edc8aa; }
 .site-footer { padding: 24px 48px 28px; display: flex; justify-content: space-between; gap: 20px; color: #8f9d96; font-size: 12px; letter-spacing: .1px; }
-.footer-year { margin-left: 4px; color: #a7b5ad; }
+.footer-year { color: #a7b5ad; }
 .info-dialog { background: #151e1a; color: #eff5f1; border: 1px solid #43564a; border-radius: 23px; width: min(540px, calc(100% - 32px)); padding: 0; box-shadow: 0 24px 120px #0008; }
 .info-dialog::backdrop { background: #020907b8; backdrop-filter: blur(9px); }
 .dialog-content { padding: 40px; position: relative; }
