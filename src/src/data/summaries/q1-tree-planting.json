@@ -1,0 +1,39 @@
+{
+  "id": "q1-tree-planting",
+  "question": "For tree planting in Canadian forest restoration, how do planting-stock traits (seedling size, nursery fertilization, mycorrhizal inoculation) affect survival and growth, and how do competing vegetation and site preparation change that?",
+  "text": "Seedling-size treatments increased growth with high certainty and survival with low certainty, nursery fertilization had mixed low-certainty growth effects and no survival evidence, and mycorrhizal inoculation had mixed moderate-certainty survival and growth effects. More competing vegetation decreased survival with high certainty but had mixed low-certainty growth effects, vegetation control increased growth with high certainty and had mixed low-certainty survival effects, and single-treatment site preparation had mixed high-certainty survival and growth effects, while combined treatments are kept separate.",
+  "sentences": [
+    {
+      "text": "Seedling-size treatments increased growth with high certainty and survival with low certainty, nursery fertilization had mixed low-certainty growth effects and no survival evidence, and mycorrhizal inoculation had mixed moderate-certainty survival and growth effects.",
+      "finding_ids": [
+        "q1:seedling_size:growth",
+        "q1:seedling_size:survival",
+        "q1:nursery_fertilization:growth",
+        "q1:inoculation:survival",
+        "q1:inoculation:growth"
+      ],
+      "gap_ids": [
+        "q1:nursery_fertilization:survival"
+      ]
+    },
+    {
+      "text": "More competing vegetation decreased survival with high certainty but had mixed low-certainty growth effects, vegetation control increased growth with high certainty and had mixed low-certainty survival effects, and single-treatment site preparation had mixed high-certainty survival and growth effects, while combined treatments are kept separate.",
+      "finding_ids": [
+        "q1:competing_vegetation:survival",
+        "q1:competing_vegetation:growth",
+        "q1:vegetation_control:growth",
+        "q1:vegetation_control:survival",
+        "q1:site_preparation:survival",
+        "q1:site_preparation:growth"
+      ],
+      "gap_ids": []
+    }
+  ],
+  "source_file": "answers/q1_tree_planting.json",
+  "source_sha256": "5fe44be1a08f3c51402fe5dd8e2a7e4009efcb056b89e59377a86b8521a48537",
+  "prompt_version": "restoration-summary-1",
+  "model": "Qwen3.8-27B",
+  "thinking_enabled": true,
+  "generated_at": "2026-11-14T17:22:51.736Z",
+  "usage": null
+}

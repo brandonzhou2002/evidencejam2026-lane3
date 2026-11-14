@@ -1,0 +1,46 @@
+{
+  "id": "q3-grassland-gaps",
+  "question": "For grassland restoration in Canada, which intervention-outcome combinations have little or no evidence, and where is the graph densest?",
+  "text": "The grassland map fills 123 of 384 intervention-outcome cells, with 72 thin and 261 empty, so many pairings have little or no evidence. No-evidence gaps include invasive removal for invasive abundance, richness, plant cover, and soil chemistry, and grazing for invasive abundance, richness, plant cover, and soil chemistry. Densest cells by study count include seeding with plant cover and richness, herbicide with plant cover, richness, and invasive abundance, and mowing/cutting with invasive abundance and richness.",
+  "sentences": [
+    {
+      "text": "The grassland map fills 123 of 384 intervention-outcome cells, with 72 thin and 261 empty, so many pairings have little or no evidence.",
+      "finding_ids": [],
+      "gap_ids": []
+    },
+    {
+      "text": "No-evidence gaps include invasive removal for invasive abundance, richness, plant cover, and soil chemistry, and grazing for invasive abundance, richness, plant cover, and soil chemistry.",
+      "finding_ids": [],
+      "gap_ids": [
+        "q3:invasive_removal:invasive_abundance",
+        "q3:invasive_removal:richness_diversity",
+        "q3:invasive_removal:plant_cover",
+        "q3:invasive_removal:soil_water_chemistry",
+        "q3:grazing:invasive_abundance",
+        "q3:grazing:richness_diversity",
+        "q3:grazing:plant_cover",
+        "q3:grazing:soil_water_chemistry"
+      ]
+    },
+    {
+      "text": "Densest cells by study count include seeding with plant cover and richness, herbicide with plant cover, richness, and invasive abundance, and mowing/cutting with invasive abundance and richness.",
+      "finding_ids": [
+        "q3:seeding:plant_cover",
+        "q3:seeding:richness_diversity",
+        "q3:herbicide:plant_cover",
+        "q3:herbicide:richness_diversity",
+        "q3:herbicide:invasive_abundance",
+        "q3:mowing_cutting:invasive_abundance",
+        "q3:mowing_cutting:richness_diversity"
+      ],
+      "gap_ids": []
+    }
+  ],
+  "source_file": "answers/q3_grassland_gaps.json",
+  "source_sha256": "8302e2e1c5141b46a03a420087b179c990b1841951b52d9b8f5bde3419b4cfba",
+  "prompt_version": "restoration-summary-1",
+  "model": "Qwen3.8-27B",
+  "thinking_enabled": true,
+  "generated_at": "2026-11-14T19:37:07.396Z",
+  "usage": null
+}

@@ -1,0 +1,44 @@
+{
+  "id": "q2-created-marshes",
+  "question": "How long do created marshes take to reach biodiversity and function comparable to natural reference wetlands, and which attributes lag?",
+  "text": "This corpus cannot establish how long a created marsh takes to match a natural reference. In pooled created and restored marshes, growth, size, and biomass, plant cover, richness, and survival are below reference, with certainty from low to high; abundance and reproduction are above reference with very low certainty, animal abundance is mixed, and community composition is unclear. Age trends, separate from one-age reference comparisons, show no clear change in community composition, richness, or invasive abundance, and no evidence covers ecosystem function.",
+  "sentences": [
+    {
+      "text": "This corpus cannot establish how long a created marsh takes to match a natural reference.",
+      "finding_ids": [],
+      "gap_ids": []
+    },
+    {
+      "text": "In pooled created and restored marshes, growth, size, and biomass, plant cover, richness, and survival are below reference, with certainty from low to high; abundance and reproduction are above reference with very low certainty, animal abundance is mixed, and community composition is unclear.",
+      "finding_ids": [
+        "q2:created_marsh:growth_size",
+        "q2:created_marsh:plant_cover",
+        "q2:created_marsh:richness_diversity",
+        "q2:created_marsh:survival_mortality",
+        "q2:created_marsh:abundance_density",
+        "q2:created_marsh:reproduction",
+        "q2:created_marsh:animal_abundance",
+        "q2:created_marsh:community_composition"
+      ],
+      "gap_ids": []
+    },
+    {
+      "text": "Age trends, separate from one-age reference comparisons, show no clear change in community composition, richness, or invasive abundance, and no evidence covers ecosystem function.",
+      "finding_ids": [
+        "q2:time_since_creation:community_composition",
+        "q2:time_since_creation:richness_diversity",
+        "q2:time_since_creation:invasive_abundance"
+      ],
+      "gap_ids": [
+        "q2:created_marsh:ecosystem_function"
+      ]
+    }
+  ],
+  "source_file": "answers/q2_created_marshes.json",
+  "source_sha256": "4c9d8892454b61118045b6af109f3583b0ab71b5b33f78cf63e88b98e6a4a1c2",
+  "prompt_version": "restoration-summary-1",
+  "model": "Qwen3.8-27B",
+  "thinking_enabled": true,
+  "generated_at": "2026-11-14T19:28:45.518Z",
+  "usage": null
+}
