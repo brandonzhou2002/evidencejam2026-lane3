@@ -64,9 +64,20 @@ export function showWalkthrough(force = false, opener = null) {
         : 'Select a finding to open its evidence drawer. Read the results and original quotes, then follow the paper link to its source.',
       target: hasMap ? '.map-cell' : '.result-cell:not(.gap), .finding-row',
       fallback: '.view-switch',
+      advance: '.finding-open, .map-cell',
       prepare: () => {
         article.querySelector('[data-close-drawer]')?.click()
         selectView('table')
+      },
+    },
+    {
+      title: 'Read the original paper',
+      text: 'Select the linked paper title to open the original paper in a new tab. The quotes below it show the source sentences behind this finding. Some publishers may require access to the full text.',
+      target: '#evidence-drawer .paper-title a',
+      fallback: '#evidence-drawer .drawer-head',
+      prepare: () => {
+        if (!article.querySelector('#evidence-drawer.is-open'))
+          article.querySelector('.finding-open, .map-cell')?.click()
       },
     },
     {
@@ -74,6 +85,7 @@ export function showWalkthrough(force = false, opener = null) {
       text: 'Select ⓘ beside a certainty rating to understand the grades, or ? beside a technical term for a short definition. You can replay this guide from How this works.',
       target: '.certainty-info, .term-info',
       fallback: '.view-switch',
+      prepare: () => article.querySelector('[data-close-drawer]')?.click(),
     },
   ]
   let step = 0,
@@ -97,6 +109,8 @@ export function showWalkthrough(force = false, opener = null) {
       target?.classList.remove('walkthrough-target')
       target = next
       target?.classList.add('walkthrough-target')
+      if (target?.matches('#evidence-drawer .paper-title a'))
+        target.scrollIntoView?.({ block: 'center', behavior: 'instant' })
     }
     const rect = target?.getBoundingClientRect()
     const padding = 12
