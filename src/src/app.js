@@ -10,6 +10,7 @@ import { escapeHTML as e, normalizeQuestion, reducedMotion } from './ui.js'
 import { icon } from './icons.js'
 import { startTerrain } from './terrain.js'
 import { technicalTerms } from './terms.js'
+import { showWalkthrough } from './walkthrough.js'
 
 const shell = document.querySelector('#app'),
   main = document.querySelector('main')
@@ -58,7 +59,7 @@ function syncChrome() {
   shell.classList.toggle('has-history', !!showPanel)
   main.classList.toggle('answer-main', !!shown)
   historyPanel.hidden = !showPanel
-  header.innerHTML = `${shown && !loading && history.length && !panelOpen ? `<button type="button" class="panel-toggle" data-action="show-history" aria-label="Show previous questions" aria-expanded="false" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button>` : ''}${loading ? '' : `<button type="button" class="about-button" data-action="about">About the evidence ${icon('ArrowUpRight', 15)}</button>`}`
+  header.innerHTML = `<button type="button" class="site-wordmark" data-action="new-question" aria-label="Understory home">UNDER<span>STORY</span></button>${shown && !loading && history.length && !panelOpen ? `<button type="button" class="panel-toggle" data-action="show-history" aria-label="Show previous questions" aria-expanded="false" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button>` : ''}${shown && !loading ? '<button type="button" class="walkthrough-help" data-action="walkthrough">How to use</button>' : ''}${loading ? '' : `<button type="button" class="about-button" data-action="about">About the evidence ${icon('ArrowUpRight', 15)}</button>`}`
   if (showPanel)
     historyPanel.innerHTML = `<div class="history-top"><button type="button" class="history-new" data-action="new-question">${icon('Plus', 16)} New question</button><button type="button" class="panel-toggle" data-action="hide-history" aria-label="Hide previous questions" aria-expanded="true" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button></div><nav aria-label="Previous questions"><ul>${history.map((entry) => `<li><button type="button" data-history="${e(entry.key)}"${shown?.key === entry.key ? ' aria-current="page"' : ''} title="${e(questions.find((q) => q.id === entry.id).question)}">${e(entry.label)}</button></li>`).join('')}</ul></nav>`
 }
@@ -144,6 +145,7 @@ async function openQuestion(question, entry = null) {
           label: repeats ? `${question.title} ${repeats + 1}` : question.title,
         })
         syncChrome()
+        showWalkthrough()
       },
     })
   } catch (error) {
@@ -220,6 +222,7 @@ document.addEventListener('click', async (event) => {
   }
   if (action === 'close-term') termDialog.close()
   if (action === 'about') showModal('about', button)
+  if (action === 'walkthrough') showWalkthrough(true, button)
   if (action === 'close-modal') dialog.close()
   if (action === 'close-certainty') certaintyDialog.close()
   if (action === 'show-history') {

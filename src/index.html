@@ -16,6 +16,14 @@
       <div class="ambient-background" aria-hidden="true"><canvas id="terrain"></canvas></div>
       <aside class="history-panel" id="history-panel" hidden></aside>
       <header class="site-header" id="site-header">
+        <button
+          type="button"
+          class="site-wordmark"
+          data-action="new-question"
+          aria-label="Understory home"
+        >
+          UNDER<span>STORY</span>
+        </button>
         <button class="about-button" type="button" data-action="about">
           About the evidence <span data-icon="ArrowUpRight" data-size="15"></span>
         </button>
@@ -35,7 +43,18 @@
               <label class="upload-button">
                 <input type="file" class="sr-only" multiple data-discard-upload />
                 <span class="sr-only">Attach files</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M209.66,122.34a8,8,0,0,1,0,11.32l-82.05,82a56,56,0,0,1-79.2-79.21L147.67,35.94a40,40,0,1,1,56.56,56.56L105,191a24,24,0,1,1-33.94-33.94l83.05-83.06a8,8,0,0,1,11.32,11.32L82.32,168.4a8,8,0,1,0,11.31,11.32L192.64,80.6a24,24,0,0,0-33.92-33.94L59.5,146.66a40,40,0,1,0,56.56,56.56l82.05-82A8,8,0,0,1,209.66,122.34Z"></path></svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M209.66,122.34a8,8,0,0,1,0,11.32l-82.05,82a56,56,0,0,1-79.2-79.21L147.67,35.94a40,40,0,1,1,56.56,56.56L105,191a24,24,0,1,1-33.94-33.94l83.05-83.06a8,8,0,0,1,11.32,11.32L82.32,168.4a8,8,0,1,0,11.31,11.32L192.64,80.6a24,24,0,0,0-33.92-33.94L59.5,146.66a40,40,0,1,0,56.56,56.56l82.05-82A8,8,0,0,1,209.66,122.34Z"
+                  ></path>
+                </svg>
               </label>
               <button class="submit-button" type="submit" disabled aria-label="Submit question">
                 <span data-icon="ArrowUp" data-size="23"></span>

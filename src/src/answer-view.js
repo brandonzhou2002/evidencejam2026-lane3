@@ -46,6 +46,21 @@ export class AnswerView {
     this.selectionNote = this.article.querySelector('.selection-note')
     this.article.querySelector('h1').focus({ preventScroll: true })
     const options = { signal: this.events.signal }
+    this.article.addEventListener(
+      'walkthrough-complete',
+      () => {
+        this.closeDrawer()
+        this.clearSelection()
+        this.glides.forEach((stop) => stop())
+        this.glides = []
+        this.preview = this.hoveredNode = this.pointedEdge = null
+        this.switchView('table')
+        this.updateHighlights()
+        this.article.querySelector('h1').focus({ preventScroll: true })
+        window.scrollTo({ top: 0, left: 0, behavior: reducedMotion() ? 'instant' : 'smooth' })
+      },
+      options,
+    )
     this.article.addEventListener('click', (event) => this.click(event), options)
     this.article.addEventListener(
       'change',

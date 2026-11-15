@@ -111,6 +111,22 @@ a:focus-visible {
   justify-content: flex-end;
   gap: 24px;
 }
+.site-wordmark {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: #eef5f1;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+.site-wordmark span {
+  color: var(--mint);
+}
 .about-button {
   margin-left: auto;
   display: flex;
@@ -138,6 +154,78 @@ a:focus-visible {
 .about-button:hover {
   color: var(--mint);
   border-color: var(--mint);
+}
+.walkthrough-help {
+  margin-left: auto;
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  color: #a9b9b0;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.walkthrough-help:hover {
+  color: var(--mint);
+}
+.walkthrough-help + .about-button {
+  margin-left: 0;
+}
+.walkthrough {
+  position: fixed;
+  z-index: 80;
+  width: min(340px, calc(100vw - 24px));
+  max-height: calc(100svh - 24px);
+  overflow-y: auto;
+  padding: 22px;
+  border: 1px solid #729d85;
+  border-radius: 14px;
+  background: #14231c;
+  box-shadow: 0 12px 40px #0008;
+}
+.walkthrough h2 {
+  margin: 0 18px 10px 0;
+  color: #eef5f1;
+  font-size: 17px;
+  font-weight: 550;
+  line-height: 1.4;
+}
+.walkthrough-target {
+  outline: 2px solid var(--mint);
+  outline-offset: 5px;
+}
+.walkthrough-progress {
+  margin: 0 30px 20px 0;
+  color: #93a69b;
+  font-size: 12px;
+}
+.walkthrough-description {
+  margin: 0;
+  color: #c3d0c9;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.walkthrough-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+}
+.walkthrough-actions button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #a9b9b0;
+  font-size: 14px;
+}
+.walkthrough-actions .walkthrough-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--mint);
+  color: #11271c;
+  font-weight: 550;
 }
 main {
   flex: 1;
@@ -486,6 +574,12 @@ h2 {
 @media (max-width: 700px) {
   .site-header {
     padding: 25px 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .site-wordmark {
+    font-size: 14px;
+    letter-spacing: 0.07em;
   }
   .about-button {
     font-size: 12px;
