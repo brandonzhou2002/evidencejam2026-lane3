@@ -1365,12 +1365,19 @@ h1.answer-question:focus {
   background: #a4edc814;
   color: #eef5f1;
 }
-.combined .pack-note {
-  margin: 0;
-  padding: 0 12px 8px;
+.combined .pack-note,
+.drawer-section > .pack-note,
+.drawer-body > .pack-note,
+.claims .pack-note,
+.coverage .pack-note {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-left: 2px solid #cf7777;
+  border-radius: 0 6px 6px 0;
+  background: #e8838310;
   font-size: 13px;
   line-height: 1.5;
-  color: #8fa69a;
+  color: #efb3b3;
 }
 .combined li + li::before {
   content: '';

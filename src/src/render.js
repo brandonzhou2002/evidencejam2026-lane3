@@ -15,7 +15,13 @@ import {
   uniqueLabels,
 } from './data/answer-data.js'
 import { limitationText, mappedGapNote, noEvidenceNote } from './data/labels.js'
-import { packNotes } from './data/pack-notes.js'
+import {
+  packNotes,
+  certaintyPackNote,
+  sourcePackNotes,
+  findingPackNotes,
+  animalOutcomeNote,
+} from './data/pack-notes.js'
 import {
   escapeHTML as e,
   opener,
@@ -128,7 +134,7 @@ export function renderCoverage(answer) {
     summary = answer.summary
   return `<section class="glance gap-map-section" aria-labelledby="map-title">${viewSwitch('Map')}<h2 id="map-title">Evidence map</h2><p class="section-hint" data-findings-hint>See where evidence is concentrated and where this map has gaps.</p><div data-table><div class="coverage">
     <p><strong>${summary.filled}</strong> of ${summary.cells} combinations studied · <strong>${summary.thin}</strong> by a single study · <strong>${summary.empty}</strong> with no mapped evidence</p>
-    <div class="map-legend" role="group" aria-label="Study count legend"><span><i class="d-thin" aria-hidden="true"></i>1 study</span><span><i class="d-some" aria-hidden="true"></i>2–3 studies</span><span><i class="d-dense" aria-hidden="true"></i>4+ studies</span><span title="${e(mappedGapNote)}"><i class="d-gap" aria-hidden="true"></i>No mapped evidence</span><span><i class="d-densest" aria-hidden="true">★</i>${densest.size} most studied</span></div></div>
+    <div class="map-legend" role="group" aria-label="Study count legend"><span><i class="d-thin" aria-hidden="true"></i>1 study</span><span><i class="d-some" aria-hidden="true"></i>2–3 studies</span><span><i class="d-dense" aria-hidden="true"></i>4+ studies</span><span title="${e(mappedGapNote)}"><i class="d-gap" aria-hidden="true"></i>No mapped evidence</span><span><i class="d-densest" aria-hidden="true">★</i>${densest.size} most studied</span></div><p class="section-hint pack-note">${e(animalOutcomeNote)}</p></div>
     <div class="gap-map-scroll"><table class="gap-map"><thead><tr><td></td>${columns.map((c) => `<th scope="col"><span title="${e(c.label)}">${labelWithTerms(c.label)}</span></th>`).join('')}</tr></thead><tbody>${rows
       .map(
         (row) =>
@@ -163,7 +169,7 @@ export function renderSources(edgeIds, evidence, titled = false, authors = {}) {
         (
           paper,
         ) => `<li><p class="paper-title">${paper.doi ? `<a href="https://doi.org/${e(paper.doi)}" target="_blank" rel="noreferrer">${e(paper.title)}<span role="img" aria-label="(opens the paper in a new tab)">${icon('ArrowUpRight', 13)}</span></a>` : e(paper.title)}<span data-paper-citation="${e(paper.id)}" data-year="${e(paper.year ?? '')}"${paperCitation(paper, authors) ? '' : ' hidden'}>${e(paperCitation(paper, authors))}</span></p>
-      <ul class="claims">${paper.claims.map((claim) => `<li><blockquote>“${e(cleanQuote(claim.quote ?? ''))}”</blockquote>${titled ? '' : `<span class="claim-line">${claimText(claim)}</span>`}</li>`).join('')}</ul></li>`,
+      <ul class="claims">${paper.claims.map((claim) => `<li><blockquote>“${e(cleanQuote(claim.quote ?? ''))}”</blockquote>${sourcePackNotes[claim.edge_id] ? `<p class="pack-note">${e(sourcePackNotes[claim.edge_id])}</p>` : ''}${titled ? '' : `<span class="claim-line">${claimText(claim)}</span>`}</li>`).join('')}</ul></li>`,
       )
       .join('')}</ol></section>`
 }
@@ -181,11 +187,13 @@ export function renderDrawer(opened, evidence, authors = {}) {
   else {
     const finding = opened.item
     content = `<div class="drawer-summary">${direction(finding.direction)}<span class="result-meta">${certainty(finding)}<span>${studyCount(finding.studies)}</span></span>${hasBreakdown(finding) ? `<span class="result-breakdown">${e(studyBreakdown(finding))}</span>` : ''}</div>
-      <section class="drawer-section"><h3>Why ${e(certaintyLabel(finding.certainty).toLowerCase())} certainty</h3><p class="section-hint">What strengthens or weakens the evidence behind this finding.</p><ul class="drawer-reasons">${certaintyReasons(
+      ${findingPackNotes[finding.id] ? `<p class="pack-note">${e(findingPackNotes[finding.id])}</p>` : ''}<section class="drawer-section"><h3>Why ${e(certaintyLabel(finding.certainty).toLowerCase())} certainty</h3><p class="section-hint">What strengthens or weakens the evidence behind this finding.</p><ul class="drawer-reasons">${certaintyReasons(
         finding.certainty_rationale,
       )
         .map((reason) => `<li>${e(reason)}</li>`)
-        .join('')}</ul></section>${renderSources(finding.edge_ids, evidence, false, authors)}`
+        .join(
+          '',
+        )}</ul>${certaintyPackNote(finding) ? `<p class="pack-note">${e(certaintyPackNote(finding))}</p>` : ''}</section>${renderSources(finding.edge_ids, evidence, false, authors)}`
   }
   return `<div class="drawer-head"><h2 id="drawer-title" tabindex="-1"${opened.kind === 'claim' ? ' class="is-claim"' : ''}>${title}</h2><button type="button" class="drawer-close" data-close-drawer aria-label="Close evidence">${icon('X', 20)}</button></div><div class="drawer-body">${content}</div>`
 }

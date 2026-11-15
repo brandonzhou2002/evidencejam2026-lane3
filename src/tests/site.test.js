@@ -32,6 +32,7 @@ import {
   loadFindingEvidence,
   loadPaperAuthors,
   paperCitation,
+  certaintyReasons,
 } from '../src/data/answer-data.js'
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)))
@@ -40,6 +41,29 @@ const names = ['q1_tree_planting', 'q2_created_marshes', 'q3_grassland_gaps']
 const answers = names.map((name) => read(`answers/${name}.json`))
 const graph = read('answers/q1_tree_planting_graph.json')
 const summaries = answers.map((answer) => read(`src/src/data/summaries/${answer.id}.json`))
+
+test('certainty explanations retain pack wording and add a separate distribution note', () => {
+  const expected = {
+    'q1:fertilization_at_planting:growth': 'Studies: 5 increase · 1 mixed · 1 no effect',
+    'q1:vegetation_control:growth': 'Studies: 4 increase · 1 decrease · 1 mixed',
+  }
+  for (const [id, breakdown] of Object.entries(expected)) {
+    const finding = answers[0].findings.find((item) => item.id === id)
+    const html = renderDrawer({ kind: 'finding', item: finding }, answers[0].evidence)
+    assert.ok(html.includes(breakdown), id)
+    assert.ok(html.includes('<p class="pack-note">'), id)
+    assert.ok(html.includes('This is not unanimous agreement.'), id)
+    assert.ok(html.includes('Why high certainty'), id)
+    assert.ok(html.includes(`Raised: ${finding.studies} studies agree`), id)
+  }
+  for (const answer of answers) {
+    for (const finding of [...answer.findings, ...(answer.with_time ?? [])]) {
+      const reasons = certaintyReasons(finding.certainty_rationale)
+      const agreement = finding.certainty_rationale.match(/\+1 (\d+) studies agree/)
+      if (agreement) assert.ok(reasons.includes(`Raised: ${agreement[1]} studies agree`))
+    }
+  }
+})
 
 test('all three answers retain every evidence control and every summary link', () => {
   for (const [index, answer] of answers.entries()) {
@@ -103,6 +127,40 @@ test('Q3 contains 24 × 16 cells, with the supplied densities and gap scope', ()
   assert.ok(summaries[2].text.includes('evidence map below'))
   assert.ok(!/no included stud/i.test(summaries[2].text))
   assert.equal(new Set(q3.findings.flatMap((f) => f.edge_ids)).size, 663)
+})
+
+test('Q2 source notes flag both no-effect coding conflicts without changing quotations or findings', () => {
+  const answer = answers[1]
+  const finding = answer.with_time.find((item) => item.outcome.id === 'community_composition')
+  const conflicts = ['camo:edge_1107dc4d1096', 'camo:edge_e9f249d67651']
+  for (const id of conflicts) {
+    assert.equal(answer.evidence[id].direction, 'no_effect')
+    const html = renderSources([id], answer.evidence)
+    assert.ok(html.includes(escapeHTML(cleanQuote(answer.evidence[id].quote))))
+    assert.ok(html.includes('The coding and quotation do not align.'))
+    assert.ok(html.includes('does not establish a recovery timeline'))
+  }
+  const html = renderSources(finding.edge_ids, answer.evidence)
+  assert.equal([...html.matchAll(/class="pack-note"/g)].length, 2)
+  assert.deepEqual(finding.study_directions, { no_effect: 2, unclear: 1 })
+})
+
+test('Q3 flags plant outcomes in all six animal cells and the combined burning treatments', () => {
+  const answer = answers[2]
+  const cells = answer.findings.filter((finding) => finding.outcome.id === 'animal_abundance')
+  assert.equal(cells.length, 6)
+  for (const finding of cells) {
+    const html = renderDrawer({ kind: 'finding', item: finding }, answer.evidence)
+    assert.ok(html.includes('This cell is mapped under animal abundance'), finding.id)
+    assert.ok(html.includes('class="pack-note"'), finding.id)
+    assert.ok(html.includes(`${finding.studies} ${finding.studies === 1 ? 'study' : 'studies'}`))
+  }
+  const burning = answer.findings.find((finding) => finding.id === 'q3:burning:invasive_abundance')
+  assert.equal(burning.edge_ids.length, 4)
+  for (const id of burning.edge_ids) assert.match(answer.evidence[id].subject, /glyphosate/i)
+  const html = renderDrawer({ kind: 'finding', item: burning }, answer.evidence)
+  assert.ok(html.includes('do not isolate the effect of burning alone'))
+  assert.ok(renderDetails(answer).includes('all six populated'))
 })
 
 test('Q2 keeps recovery time unknown and age observations separate', () => {

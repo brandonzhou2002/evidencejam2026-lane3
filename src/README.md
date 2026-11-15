@@ -79,3 +79,8 @@ from `graph/causal_graph.yaml` into a compact `paper-authors.json` file. Sources
 loads this local metadata only on first opening and formats citations from it;
 author names are not manually entered in the UI. The extraction uses only
 Python's standard library and the supplied graph's metadata serialization.
+
+## Reviewed evidence issues
+
+See the [confirmed issue list in the root README](../README.md#confirmed-issues-in-the-supplied-evidence-pack)
+for affected records and the explanatory notes shown in the interface.

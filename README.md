@@ -1,5 +1,87 @@
 # Lane 3 — Decision Support
 
+## Confirmed issues in the supplied evidence pack
+
+These are the discrepancies identified and checked during our review, rather
+than a claim that every supplied record has been audited. The site preserves
+the supplied findings, categories, counts, grades and quotations, and adds
+explanatory notes in `src/src/data/pack-notes.js`.
+
+### Q1: agreement wording overstates consistency
+
+Two growth findings have an agreement adjustment in `certainty_rationale`
+whose wording does not match unanimous agreement in `study_directions`:
+
+| Finding                                                                    | Supplied rationale | Actual study distribution        |
+| -------------------------------------------------------------------------- | ------------------ | -------------------------------- |
+| Fertilization at planting → growth (`q1:fertilization_at_planting:growth`) | “7 studies agree”  | 5 increase, 1 mixed, 1 no effect |
+| Vegetation control → growth (`q1:vegetation_control:growth`)               | “6 studies agree”  | 4 increase, 1 decrease, 1 mixed  |
+
+The original explanation remains visible. A separate note below it gives the
+actual distribution and explains that agreement is not unanimous. Both supplied
+certainty grades remain high.
+
+### Q1: moderation direction differs between table and graph
+
+Claims `camo:edge_3fb326f2a6c3` and `camo:edge_ee5aa30bcc2d` describe
+fertilization strengthening scarification's positive effect on seedling growth.
+The table labels these moderation claims unclear, while the graph shows an
+increase. Notes beneath the combined-treatment claims explain the difference;
+neither representation's supplied direction is changed.
+
+### Q2: two “no effect” codes conflict with their quotations
+
+Under **Time since creation or restoration → Community composition & similarity**,
+two claims from _Microbial community structure in restored riparian soils of
+the Canadian prairie pothole region_ (`10.1016/j.soilbio.2010.05.010`) are coded
+`no_effect` despite quotations reporting significant age-group differences:
+
+- `camo:edge_1107dc4d1096`: younger restored sites differ from older restored
+  and reference sites within the wet-site group.
+- `camo:edge_e9f249d67651`: microbial communities differ with restoration age;
+  older and reference sites group closer together than younger sites.
+
+Each affected quotation has a note directly beneath it in **Sources**. These
+comparisons do not establish a recovery timeline. The supplied finding still
+reports 2 studies coded no effect and 1 unclear; the two flagged claims come
+from one paper, so they are not two separate studies.
+
+### Q3: plant outcomes mapped into the animal-abundance column
+
+All six populated **Animal abundance & occurrence** cells contain plant
+outcomes rather than measurements of animal abundance:
+
+| Row / finding ID                                                                   | Supplied studies | Claims | Outcomes described                      |
+| ---------------------------------------------------------------------------------- | ---------------- | ------ | --------------------------------------- |
+| Planting & transplanting (`q3:planting:animal_abundance`)                          | 1                | 1      | Nitrogen captured in alder plants       |
+| Herbicide & chemical vegetation control (`q3:herbicide:animal_abundance`)          | 2                | 5      | Plant species, seed heads and seedlings |
+| Vegetation control (`q3:mowing_cutting:animal_abundance`)                          | 2                | 3      | Rough fescue, seedlings and herbs       |
+| Mulch & surface cover (`q3:mulch:animal_abundance`)                                | 2                | 2      | Seedling density and rough fescue cover |
+| Topsoil, forest floor & inoculum transfer (`q3:topsoil_transfer:animal_abundance`) | 1                | 1      | Nitrogen captured in alder plants       |
+| Smoke & ash treatments (`q3:smoke_ash:animal_abundance`)                           | 1                | 3      | Plant seedling density                  |
+
+The planting and topsoil cells share the same alder claim
+(`camo:edge_78c33abb011d`). Claim counts in this table therefore overlap.
+A classification note appears beneath the map legend, with specific notes
+below the result summary in each affected cell's drawer. Cells have not been
+reclassified and map totals remain unchanged.
+
+### Q3: burning results concern combined treatments
+
+**Prescribed burning → Invasive / non-native species abundance**
+(`q3:burning:invasive_abundance`) contains 4 claims from 2 studies. All four
+concern combinations involving burning and glyphosate, sometimes with mowing
+or sethoxydim:
+
+- `camo:edge_00e6c28641e7`
+- `camo:edge_7508d85e106f`
+- `camo:edge_da0063deef0c`
+- `camo:edge_ef38701c9f77`
+
+A note below the drawer's result summary explains that the observed reductions
+cannot be attributed to burning alone from these claims. Counts, directions,
+certainty grades and quotations are preserved.
+
 ## Run this submission
 
 Build the HTML/CSS/JavaScript website from a clean checkout with Python 3.10 or newer:
