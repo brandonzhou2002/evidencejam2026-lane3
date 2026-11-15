@@ -62,6 +62,7 @@ function graphModule() {
   return graphPending
 }
 function syncChrome() {
+  syncPause()
   const showPanel = !!shown && !loading && history.length > 0 && panelOpen
   shell.classList.toggle('showing-answer', !!shown)
   shell.classList.toggle('has-history', !!showPanel)
@@ -72,7 +73,7 @@ function syncChrome() {
     historyPanel.innerHTML = `<div class="history-top"><button type="button" class="history-new" data-action="new-question">${icon('Plus', 16)} New question</button><button type="button" class="panel-toggle" data-action="hide-history" aria-label="Hide previous questions" aria-expanded="true" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button></div><nav aria-label="Previous questions"><ul>${history.map((entry) => `<li><button type="button" data-history="${e(entry.key)}"${shown?.key === entry.key ? ' aria-current="page"' : ''} title="${e(questions.find((q) => q.id === entry.id).question)}">${e(entry.label)}</button></li>`).join('')}</ul></nav>`
 }
 function syncPause() {
-  terrain?.setPaused(dialog.open || certaintyDialog.open || termDialog.open)
+  terrain?.setPaused(!!shown || dialog.open || certaintyDialog.open || termDialog.open)
 }
 function showModal(kind, trigger) {
   modalTrigger = trigger

@@ -209,6 +209,7 @@ export function startTerrain(canvas) {
       frame = requestAnimationFrame(tick)
   }
   function onPointerMove(event) {
+    if (modalPaused) return
     pointer.targetX = event.clientX / window.innerWidth
     pointer.targetY = 1 - event.clientY / window.innerHeight
     if (pointer.x < -1) {
@@ -223,6 +224,7 @@ export function startTerrain(canvas) {
     sync()
   }
   const setPaused = (value) => {
+    if (modalPaused === value) return
     modalPaused = value
     sync()
   }
