@@ -202,6 +202,9 @@ document.addEventListener('input', (event) => {
   if (event.target.id === 'question')
     main.querySelector('.submit-button').disabled = !event.target.value.trim()
 })
+document.addEventListener('change', (event) => {
+  if (event.target.matches('[data-discard-upload]')) event.target.value = ''
+})
 document.addEventListener('keydown', (event) => {
   if (
     event.target.id === 'question' &&

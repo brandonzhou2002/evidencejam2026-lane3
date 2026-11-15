@@ -202,8 +202,29 @@ textarea::placeholder {
 }
 .composer-toolbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 14px;
+}
+.upload-button {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  color: #aebdb5;
+  cursor: pointer;
+  transition:
+    background 150ms,
+    color 150ms;
+}
+.upload-button:hover {
+  background: #a4edc812;
+  color: var(--mint);
+}
+.upload-button:focus-within {
+  outline: 2px solid var(--mint);
+  outline-offset: 2px;
 }
 .submit-button {
   width: 43px;
