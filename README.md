@@ -7,6 +7,9 @@ than a claim that every supplied record has been audited. The site preserves
 the supplied findings, categories, counts, grades and quotations, and adds
 explanatory notes in `src/src/data/pack-notes.js`.
 
+Thank you to **Arda** for catching these issues and helping us make the evidence
+and its limitations clearer.
+
 ### Q1: agreement wording overstates consistency
 
 Two growth findings have an agreement adjustment in `certainty_rationale`
@@ -99,9 +102,19 @@ python3 -m http.server 8000 --directory site
 Open `http://localhost:8000`. The build uses only Python's standard library,
 requires no package installation, and makes no network calls.
 
-For local development, `python3 src/scripts/dev.py` serves the site on port
-5173 and rebuilds when you refresh after changing a source file. See
-[`src/README.md`](src/README.md) for the source layout and verification command.
+To get started, select **How this works** on the question page for an overview
+of the website.
+On an answer page, the same button opens step-by-step instructions beside the
+controls, showing how to follow summary sentences to findings, switch views,
+and open source papers.
+
+We have tested the build from a clean checkout and confirmed that the built
+site works offline without network access. Python dependencies are all part
+of the standard library, so no additional libraries need to be installed.
+If the local build or preview fails in your environment for any reason, use
+the [Vercel-hosted version of Understory](https://evidencejam2026-lane3-random.vercel.app),
+built from the same code in this repository, as a fallback.
+
 
 ## The challenge
 
