@@ -153,7 +153,11 @@ test('Q3 flags plant outcomes in all six animal cells and the combined burning t
     const html = renderDrawer({ kind: 'finding', item: finding }, answer.evidence)
     assert.ok(html.includes('This cell is mapped under animal abundance'), finding.id)
     assert.ok(html.includes('class="pack-note"'), finding.id)
-    assert.ok(html.includes(`${finding.studies} ${finding.studies === 1 ? 'study' : 'studies'}`))
+    assert.ok(
+      html
+        .replace(/<[^>]+>/g, '')
+        .includes(`${finding.studies} ${finding.studies === 1 ? 'study' : 'studies'}`),
+    )
   }
   const burning = answer.findings.find((finding) => finding.id === 'q3:burning:invasive_abundance')
   assert.equal(burning.edge_ids.length, 4)

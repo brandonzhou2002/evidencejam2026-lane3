@@ -1859,6 +1859,22 @@ h1.answer-question:focus {
   align-items: flex-start;
   gap: 10px;
 }
+.drawer-finding-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 16px;
+}
+.drawer-finding-summary > .direction,
+.drawer-finding-summary > .result-meta {
+  grid-column: 1;
+}
+.drawer-finding-summary > .result-breakdown {
+  grid-column: 1 / -1;
+}
+.drawer-finding-summary .result-study-count strong {
+  font-size: 22px;
+}
 .drawer-summary p {
   margin: 0;
   font-size: 14px;

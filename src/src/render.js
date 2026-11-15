@@ -186,7 +186,7 @@ export function renderDrawer(opened, evidence, authors = {}) {
     content = `<div class="drawer-summary"><span class="drawer-gap">No evidence found</span><p>${e(noEvidenceNote)}</p></div><section class="drawer-section"><h3>What was searched for</h3><p class="section-hint">The evidence checked for this practice and outcome.</p><p>${e(opened.item.searched_for)}</p></section>`
   else {
     const finding = opened.item
-    content = `<div class="drawer-summary">${direction(finding.direction)}<span class="result-meta">${certainty(finding)}<span>${studyCount(finding.studies)}</span></span>${hasBreakdown(finding) ? `<span class="result-breakdown">${e(studyBreakdown(finding))}</span>` : ''}</div>
+    content = `<div class="drawer-summary drawer-finding-summary">${direction(finding.direction)}<span class="result-meta">${certainty(finding)}</span><span class="result-study-count"><strong>${finding.studies}</strong> <span>${finding.studies === 1 ? 'study' : 'studies'}</span></span>${hasBreakdown(finding) ? `<span class="result-breakdown">${e(studyBreakdown(finding))}</span>` : ''}</div>
       ${findingPackNotes[finding.id] ? `<p class="pack-note">${e(findingPackNotes[finding.id])}</p>` : ''}<section class="drawer-section"><h3>Why ${e(certaintyLabel(finding.certainty).toLowerCase())} certainty</h3><p class="section-hint">What strengthens or weakens the evidence behind this finding.</p><ul class="drawer-reasons">${certaintyReasons(
         finding.certainty_rationale,
       )
