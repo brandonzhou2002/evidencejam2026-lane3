@@ -1,0 +1,125 @@
+.field-work { display: flex; min-height: calc(100vh - 240px); flex-direction: column; align-items: center; justify-content: center; animation: fw-in .5s ease both; }
+.field-work svg { width: min(820px, 100%); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.field-work svg * { transform-box: view-box; transform-origin: 0 0; }
+
+.fw-line, .fw-hill, .fw-ground, .fw-furrow, .fw-mound { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.fw-line { stroke: var(--mint); stroke-width: 2; }
+.fw-body { fill: #8fd4b1; }
+.fw-skin { fill: #d4f3e3; }
+.fw-hat { fill: #b9ecd2; }
+.fw-boot { fill: #4e7d66; }
+.fw-limb { fill: none; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+.fw-sleeve { stroke: #8fd4b1; }
+.fw-trouser { stroke: #5f9a7c; stroke-width: 3.8; }
+.fw-back { opacity: .55; }
+.fw-tool { fill: none; stroke: #c3e8d4; stroke-width: 1.5; stroke-linecap: round; }
+.fw-can { fill: #c3e8d4; fill-opacity: .8; }
+.fw-leaf { fill: var(--mint); fill-opacity: .82; }
+.fw-board { fill-opacity: .55; }
+.fw-hill { stroke: rgba(164, 237, 200, .2); stroke-width: 1.2; stroke-dasharray: 700; animation: fw-draw 1.6s ease-out both; }
+.fw-hill-far { stroke: rgba(164, 237, 200, .1); animation-delay: .15s; }
+.fw-ground { stroke: rgba(164, 237, 200, .5); stroke-width: 1.4; stroke-dasharray: 700; animation: fw-draw 1s ease-out both; }
+.fw-furrow { stroke: rgba(164, 237, 200, .13); stroke-width: 1; stroke-dasharray: 2 9; }
+.fw-furrow-near { stroke: rgba(164, 237, 200, .08); stroke-dasharray: 3 14; }
+.fw-mound { stroke: rgba(164, 237, 200, .4); stroke-width: 1.4; }
+.fw-tuft { fill: none; stroke: rgba(164, 237, 200, .35); stroke-width: 1.1; stroke-linecap: round; }
+.fw-far-tree { fill: rgba(164, 237, 200, .17); animation: fw-appear .8s ease both; }
+.fw-sun { fill: #a4edc8; fill-opacity: .6; }
+.fw-glow { fill: #a4edc8; fill-opacity: .05; }
+.fw-orbit { animation: fw-orbit cubic-bezier(.2, .6, .35, 1) both; }
+.fw-fly { animation: fw-fly linear both; }
+.fw-bird { fill: none; stroke: rgba(164, 237, 200, .6); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; animation: fw-flap .32s ease-in-out infinite alternate; }
+.fw-sprout { animation: fw-sprout .7s cubic-bezier(.3, 1.6, .5, 1) both; }
+.fw-fade { animation: fw-fade .3s ease forwards; }
+.fw-tree { animation: fw-sprout .5s cubic-bezier(.3, 1.5, .5, 1) both; }
+.fw-dig { animation: fw-dig 1.1s ease-in-out infinite; }
+.fw-dirt { fill: rgba(164, 237, 200, .7); opacity: 0; animation: fw-dirt 1.1s ease-out infinite; }
+.fw-dirt-1 { animation-name: fw-dirt-far; }
+.fw-dirt-2 { animation-name: fw-dirt-high; }
+
+.fw-walk { animation: fw-walk linear both; }
+.fw-bob { animation: fw-bob calc(var(--stride) / 2) ease-in-out infinite alternate; }
+.fw-leg { animation: fw-stride var(--stride) ease-in-out infinite alternate; }
+.fw-leg-back, .fw-arm { animation-direction: alternate-reverse; }
+.fw-arm { animation: fw-swing var(--stride) ease-in-out infinite alternate-reverse; }
+.fw-drop { fill: #c9f6df; animation: fw-drop .45s ease-in infinite; }
+.fw-drop-1 { animation-delay: .15s; }
+.fw-drop-2 { animation-delay: .3s; }
+
+.fw-nod { animation: fw-nod 2.4s ease-in-out infinite; }
+.fw-write { animation: fw-write .36s ease-in-out infinite alternate; }
+.fw-pollen { fill: var(--mint); opacity: 0; animation: fw-pollen 6s ease-out infinite; }
+.field-work-steps { display: grid; margin: 26px 0 0; font-size: 15px; letter-spacing: .1px; color: #c5d0ca; }
+.field-work-steps span { grid-area: 1 / 1; text-align: center; opacity: 0; animation: fw-step ease both; }
+.field-work-steps span.is-last { animation-name: fw-step-last; }
+
+@keyframes fw-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes fw-draw { from { stroke-dashoffset: 700; } to { stroke-dashoffset: 0; } }
+@keyframes fw-sprout {
+  from { transform: scale(0, 0); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: scale(1, 1); opacity: 1; }
+}
+@keyframes fw-dig {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  45% { transform: rotate(16deg) translateY(1px); }
+  62% { transform: rotate(-6deg) translateY(-2px); }
+}
+@keyframes fw-dirt {
+  0%, 55% { opacity: 0; transform: translate(0, 0); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-16px, -6px); }
+}
+@keyframes fw-dirt-far {
+  0%, 57% { opacity: 0; transform: translate(0, 0); }
+  62% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-22px, 2px); }
+}
+@keyframes fw-dirt-high {
+  0%, 56% { opacity: 0; transform: translate(0, 0); }
+  61% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-10px, -11px); }
+}
+@keyframes fw-walk {
+  from { transform: translateX(0); opacity: 0; }
+  6%, 92% { opacity: 1; }
+  to { transform: translateX(var(--walk)); opacity: 0; }
+}
+@keyframes fw-bob { from { transform: translateY(0); } to { transform: translateY(-1.4px); } }
+@keyframes fw-stride { from { transform: rotate(-24deg); } to { transform: rotate(24deg); } }
+@keyframes fw-swing { from { transform: rotate(-28deg); } to { transform: rotate(28deg); } }
+@keyframes fw-drop {
+  from { opacity: 0; transform: translate(0, 0); }
+  20% { opacity: 1; }
+  to { opacity: 0; transform: translate(2px, 16px); }
+}
+@keyframes fw-nod { 0%, 100% { transform: rotate(0deg); } 40%, 60% { transform: rotate(12deg); } }
+@keyframes fw-write { from { transform: rotate(-6deg); } to { transform: rotate(8deg); } }
+@keyframes fw-pollen {
+  0% { opacity: 0; transform: translate(0, 0); }
+  20% { opacity: .8; }
+  100% { opacity: 0; transform: translate(14px, -96px); }
+}
+@keyframes fw-appear { from { opacity: 0; } }
+@keyframes fw-orbit { from { transform: rotate(-28deg); } to { transform: rotate(-2deg); } }
+@keyframes fw-fly {
+  from { transform: translateX(600px); opacity: 0; }
+  10%, 85% { opacity: 1; }
+  to { transform: translateX(-40px); opacity: 0; }
+}
+@keyframes fw-flap { from { transform: scale(1, 1); } to { transform: scale(1, -.5); } }
+@keyframes fw-fade { to { opacity: 0; } }
+@keyframes fw-step {
+  0% { opacity: 0; transform: translateY(6px); }
+  20%, 80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+@keyframes fw-step-last {
+  0% { opacity: 0; transform: translateY(6px); }
+  20%, 100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-walk, .fw-dirt, .fw-drop, .fw-pollen, .fw-fade, .fw-fly, .field-work-steps span:not(.is-last) { visibility: hidden; }
+  .field-work-steps span.is-last { opacity: 1; }
+}

@@ -6,12 +6,12 @@ export const questions = [
   },
   {
     "id": "q2-created-marshes",
-    "title": "Created marshes",
+    "title": "Marsh recovery",
     "question": "How long do created marshes take to reach biodiversity and function comparable to natural reference wetlands, and which attributes lag?"
   },
   {
     "id": "q3-grassland-gaps",
-    "title": "Grassland restoration",
+    "title": "Grassland evidence gaps",
     "question": "For grassland restoration in Canada, which intervention-outcome combinations have little or no evidence, and where is the graph densest?"
   }
 ] as const

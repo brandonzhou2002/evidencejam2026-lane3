@@ -1,20 +1,38 @@
 {
   "id": "q2-created-marshes",
   "question": "How long do created marshes take to reach biodiversity and function comparable to natural reference wetlands, and which attributes lag?",
-  "text": "This corpus cannot establish how long a created marsh takes to match a natural reference. In pooled created and restored marshes, growth, size, and biomass, plant cover, richness, and survival are below reference, with certainty from low to high; abundance and reproduction are above reference with very low certainty, animal abundance is mixed, and community composition is unclear. Age trends, separate from one-age reference comparisons, show no clear change in community composition, richness, or invasive abundance, and no evidence covers ecosystem function.",
+  "text": "No included study reports how long a created marsh takes to match a natural one, and each comparison below is a snapshot at one age, not a recovery path. Created and restored marshes had lower growth, size and biomass than natural marshes, with high certainty. Species richness was lower in two of three studies, with moderate certainty. Plant cover and survival were also lower, but each rests on a single study, with very low and low certainty. Single studies found higher abundance and reproduction, mixed animal abundance and an unclear difference in community composition, all with very low certainty. As marshes aged, studies found no clear change in community composition, with moderate certainty, or in species richness and invasive species, with very low certainty. No included study compared created and natural marshes on ecosystem processes, hydrology, soil properties, soil and water chemistry, contaminants, plant establishment, animal behaviour or invasive species.",
   "sentences": [
     {
-      "text": "This corpus cannot establish how long a created marsh takes to match a natural reference.",
+      "text": "No included study reports how long a created marsh takes to match a natural one, and each comparison below is a snapshot at one age, not a recovery path.",
       "finding_ids": [],
       "gap_ids": []
     },
     {
-      "text": "In pooled created and restored marshes, growth, size, and biomass, plant cover, richness, and survival are below reference, with certainty from low to high; abundance and reproduction are above reference with very low certainty, animal abundance is mixed, and community composition is unclear.",
+      "text": "Created and restored marshes had lower growth, size and biomass than natural marshes, with high certainty.",
       "finding_ids": [
-        "q2:created_marsh:growth_size",
+        "q2:created_marsh:growth_size"
+      ],
+      "gap_ids": []
+    },
+    {
+      "text": "Species richness was lower in two of three studies, with moderate certainty.",
+      "finding_ids": [
+        "q2:created_marsh:richness_diversity"
+      ],
+      "gap_ids": []
+    },
+    {
+      "text": "Plant cover and survival were also lower, but each rests on a single study, with very low and low certainty.",
+      "finding_ids": [
         "q2:created_marsh:plant_cover",
-        "q2:created_marsh:richness_diversity",
-        "q2:created_marsh:survival_mortality",
+        "q2:created_marsh:survival_mortality"
+      ],
+      "gap_ids": []
+    },
+    {
+      "text": "Single studies found higher abundance and reproduction, mixed animal abundance and an unclear difference in community composition, all with very low certainty.",
+      "finding_ids": [
         "q2:created_marsh:abundance_density",
         "q2:created_marsh:reproduction",
         "q2:created_marsh:animal_abundance",
@@ -23,22 +41,34 @@
       "gap_ids": []
     },
     {
-      "text": "Age trends, separate from one-age reference comparisons, show no clear change in community composition, richness, or invasive abundance, and no evidence covers ecosystem function.",
+      "text": "As marshes aged, studies found no clear change in community composition, with moderate certainty, or in species richness and invasive species, with very low certainty.",
       "finding_ids": [
         "q2:time_since_creation:community_composition",
         "q2:time_since_creation:richness_diversity",
         "q2:time_since_creation:invasive_abundance"
       ],
+      "gap_ids": []
+    },
+    {
+      "text": "No included study compared created and natural marshes on ecosystem processes, hydrology, soil properties, soil and water chemistry, contaminants, plant establishment, animal behaviour or invasive species.",
+      "finding_ids": [],
       "gap_ids": [
-        "q2:created_marsh:ecosystem_function"
+        "q2:created_marsh:behaviour_habitat_use",
+        "q2:created_marsh:contaminants",
+        "q2:created_marsh:ecosystem_function",
+        "q2:created_marsh:establishment_regeneration",
+        "q2:created_marsh:hydrology_geomorphology",
+        "q2:created_marsh:invasive_abundance",
+        "q2:created_marsh:soil_physical",
+        "q2:created_marsh:soil_water_chemistry"
       ]
     }
   ],
   "source_file": "answers/q2_created_marshes.json",
   "source_sha256": "4c9d8892454b61118045b6af109f3583b0ab71b5b33f78cf63e88b98e6a4a1c2",
-  "prompt_version": "restoration-summary-1",
-  "model": "Qwen3.8-27B",
-  "thinking_enabled": true,
-  "generated_at": "2026-11-14T19:28:45.518Z",
+  "prompt_version": "restoration-summary-2",
+  "model": "hand-written",
+  "thinking_enabled": false,
+  "generated_at": "2026-11-14T22:45:40.000Z",
   "usage": null
 }
