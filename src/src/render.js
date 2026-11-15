@@ -49,7 +49,7 @@ export function renderResult(result) {
   if (!isFinding(result))
     return `<button type="button" ${opener(result.id)} class="result-cell gap" ${linked(result.id)}>No evidence found</button>`
   return `<div class="result-cell" ${linked(result.id)}><button type="button" ${opener(result.id)} class="finding-open" aria-label="${evidenceLabel(result)}"></button>
-    ${direction(result.direction)}<span class="result-meta">${certainty(result)}<span>${studyCount(result.studies)}</span></span>${hasBreakdown(result) ? `<span class="result-breakdown">${e(studyBreakdown(result))}</span>` : ''}</div>`
+    ${direction(result.direction)}<span class="result-meta">${certainty(result)}</span><span class="result-study-count" aria-label="${studyCount(result.studies)}"><strong>${result.studies}</strong><span>${result.studies === 1 ? 'study' : 'studies'}</span></span>${hasBreakdown(result) ? `<span class="result-breakdown">${e(studyBreakdown(result))}</span>` : ''}</div>`
 }
 
 export function renderMatrix(answer, graph) {
