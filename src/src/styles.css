@@ -604,6 +604,56 @@ h1.answer-question:focus {
   color: var(--mint);
   background: #a4edc81a;
 }
+.selection-note {
+  position: fixed;
+  z-index: 15;
+  right: 24px;
+  bottom: 24px;
+  width: min(360px, calc(100vw - 32px));
+  max-height: min(40svh, 280px);
+  overflow-y: auto;
+  padding: 18px 48px 18px 18px;
+  border: 1px solid #547762;
+  border-radius: 14px;
+  background: #14211bf5;
+  box-shadow: 0 12px 40px #0005;
+  backdrop-filter: blur(14px);
+}
+.selection-note p {
+  margin: 0;
+  color: #dcebe2;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.selection-note button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #acc7b7;
+}
+.selection-note button:hover {
+  color: var(--mint);
+  background: #a4edc812;
+}
+@media (min-width: 1280px) {
+  .answer-main:has(.evidence-drawer.is-open) .selection-note {
+    right: 484px;
+  }
+}
+@media (max-width: 760px) {
+  .selection-note {
+    right: 16px;
+    bottom: 16px;
+  }
+}
 
 .glance {
   margin-top: 40px;

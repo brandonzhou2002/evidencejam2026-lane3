@@ -1,5 +1,6 @@
 import { renderDetails, renderDrawer, renderHeadline, renderTakeaways } from './render.js'
 import { escapeHTML as e, glide, reducedMotion, sentenceIds } from './ui.js'
+import { icon } from './icons.js'
 
 export class AnswerView {
   constructor(
@@ -29,11 +30,12 @@ export class AnswerView {
     if (graph && graphModule)
       for (const item of [...graph.edges, ...graph.gaps])
         this.records.set(item.id, graphModule.graphFinding(item, graph))
-    container.innerHTML = `<article class="answer-view"><h1 tabindex="-1" class="answer-question">${e(question.question)}</h1>${renderHeadline(answer)}<div class="takeaways"></div><div class="answer-details"></div><aside id="evidence-drawer" class="evidence-drawer" role="dialog" aria-label="Evidence" aria-hidden="true" inert></aside></article>`
+    container.innerHTML = `<article class="answer-view"><h1 tabindex="-1" class="answer-question">${e(question.question)}</h1>${renderHeadline(answer)}<div class="takeaways"></div><div class="answer-details"></div><aside class="selection-note" role="region" aria-label="Selected summary sentence" hidden><p aria-live="polite"></p><button type="button" data-clear-selection aria-label="Clear selection and return to summary" title="Return to summary">${icon('X', 18)}</button></aside><aside id="evidence-drawer" class="evidence-drawer" role="dialog" aria-label="Evidence" aria-hidden="true" inert></aside></article>`
     this.article = container.querySelector('article')
     this.takeaways = this.article.querySelector('.takeaways')
     this.details = this.article.querySelector('.answer-details')
     this.drawer = this.article.querySelector('#evidence-drawer')
+    this.selectionNote = this.article.querySelector('.selection-note')
     this.article.querySelector('h1').focus({ preventScroll: true })
     const options = { signal: this.events.signal }
     this.article.addEventListener('click', (event) => this.click(event), options)
@@ -51,7 +53,10 @@ export class AnswerView {
     window.addEventListener(
       'keydown',
       (event) => {
-        if (event.key === 'Escape' && !document.querySelector('dialog[open]')) this.closeDrawer()
+        if (event.key === 'Escape' && !document.querySelector('dialog[open]')) {
+          if (this.openedId) this.closeDrawer()
+          else if (this.pinned !== null) this.clearSelection()
+        }
       },
       options,
     )
@@ -79,7 +84,8 @@ export class AnswerView {
     if (target.hasAttribute('data-certainty')) {
       const record = this.records.get(target.dataset.certainty)
       if (record?.kind === 'finding') this.onExplain(record.item, target)
-    } else if (target.hasAttribute('data-close-drawer')) this.closeDrawer()
+    } else if (target.hasAttribute('data-clear-selection')) this.clearSelection()
+    else if (target.hasAttribute('data-close-drawer')) this.closeDrawer()
     else if (target.hasAttribute('data-view')) this.switchView(target.dataset.view)
     else if (target.hasAttribute('data-open')) this.open(target.dataset.open, target)
     else if (target.hasAttribute('data-sentence')) this.pin(Number(target.dataset.sentence))
@@ -111,6 +117,9 @@ export class AnswerView {
 
   pin(index) {
     this.pinned = this.pinned === index ? null : index
+    this.selectionNote.hidden = this.pinned === null
+    this.selectionNote.querySelector('p').textContent =
+      this.pinned === null ? '' : this.bundle.summary.sentences[this.pinned].text
     for (const element of this.takeaways.querySelectorAll('[data-sentence]'))
       element.setAttribute('aria-pressed', String(Number(element.dataset.sentence) === this.pinned))
     this.updateHighlights()
@@ -147,6 +156,39 @@ export class AnswerView {
           duration,
         ),
       )
+  }
+
+  clearSelection() {
+    const index = this.pinned
+    if (index === null) return
+    this.glides.forEach((stop) => stop())
+    this.glides = []
+    this.pinned = this.preview = null
+    this.hoveredNode = this.pointedEdge = null
+    this.selectionNote.hidden = true
+    this.selectionNote.querySelector('p').textContent = ''
+    for (const element of this.takeaways.querySelectorAll('[data-sentence]'))
+      element.setAttribute('aria-pressed', 'false')
+    if (this.openedId) this.closeDrawer()
+    const sentence = this.takeaways.querySelector(`[data-sentence="${index}"]`)
+    sentence?.focus({ preventScroll: true })
+    // Focus returns to the summary without restoring its hover preview.
+    this.preview = null
+    this.updateHighlights()
+    if (sentence) {
+      const top = Math.max(
+        0,
+        window.scrollY + sentence.getBoundingClientRect().top - window.innerHeight * 0.3,
+      )
+      this.glides.push(
+        glide(
+          () => window.scrollY,
+          (y) => window.scrollTo(0, y),
+          top,
+          reducedMotion() ? 0 : 700,
+        ),
+      )
+    }
   }
 
   updateHighlights() {
