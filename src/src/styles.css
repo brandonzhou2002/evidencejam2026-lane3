@@ -1051,6 +1051,8 @@ h1.answer-question:focus {
 }
 
 .view-switch {
+  scroll-margin-top: 72px;
+  scroll-margin-bottom: 72px;
   display: inline-flex;
   gap: 2px;
   padding: 3px;

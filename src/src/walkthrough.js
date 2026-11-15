@@ -109,16 +109,18 @@ export function showWalkthrough(force = false, opener = null) {
       target?.classList.remove('walkthrough-target')
       target = next
       target?.classList.add('walkthrough-target')
-      if (target?.matches('#evidence-drawer .paper-title a'))
+      // Scroll when the highlighted control changes, including after async
+      // graph/chart mounts replace the temporary fallback target.
+      if (target && !target.matches('.selection-note'))
         target.scrollIntoView?.({ block: 'center', behavior: 'instant' })
     }
     const rect = target?.getBoundingClientRect()
     const padding = 12
+    const gap = target?.matches('.view-switch') ? 20 : padding
     const width = note.offsetWidth
+    note.style.maxHeight = ''
     const height = note.offsetHeight
-    const below = (rect?.bottom ?? 64) + padding
-    let top =
-      below + height <= window.innerHeight - padding ? below : (rect?.top ?? 64) - height - padding
+    let top = (rect?.bottom ?? 64) + gap
     let left = rect?.left ?? padding
     // Put the guide beside the fixed selection box rather than over its close button.
     if (target?.matches('.selection-note')) {
@@ -128,9 +130,30 @@ export function showWalkthrough(force = false, opener = null) {
         left = rect.left
         top = rect.top - height - padding
       }
+    } else if (target?.matches('.view-switch')) {
+      // Keep the whole tab control visible: prefer beside it, else clearly below.
+      left = rect.right + gap
+      top = rect.top
+      if (left + width > window.innerWidth - padding) {
+        left = Math.max(padding, Math.min(rect.left, window.innerWidth - width - padding))
+        top = rect.bottom + gap
+      }
+    } else if (top + height > window.innerHeight - padding) {
+      top = (rect?.top ?? 64) - height - gap
     }
-    note.style.left = `${Math.max(padding, Math.min(left, window.innerWidth - width - padding))}px`
-    note.style.top = `${Math.max(padding, Math.min(top, window.innerHeight - height - padding))}px`
+    left = Math.max(padding, Math.min(left, window.innerWidth - width - padding))
+    top = Math.max(padding, Math.min(top, window.innerHeight - height - padding))
+    // If the card still covers the highlighted control, push it fully below.
+    if (rect && top < rect.bottom + gap && top + height > rect.top) {
+      const below = rect.bottom + gap
+      if (below + height <= window.innerHeight - padding) top = below
+      else if (rect.right + gap + width <= window.innerWidth - padding) {
+        left = rect.right + gap
+        top = Math.max(padding, Math.min(rect.top, window.innerHeight - height - padding))
+      }
+    }
+    note.style.left = `${left}px`
+    note.style.top = `${top}px`
   }
   function schedulePosition() {
     if (!frame) frame = requestAnimationFrame(position)
@@ -157,13 +180,17 @@ export function showWalkthrough(force = false, opener = null) {
   }
   function render() {
     steps[step].prepare?.()
+    article.dispatchEvent(new Event('walkthrough-navigate'))
     note.innerHTML = `<button type="button" class="certainty-dialog-close" data-tour="close" aria-label="Close guide">${icon('X', 18)}</button><p class="walkthrough-progress">${step + 1} of ${steps.length}</p><h2 tabindex="-1">${steps[step].title}</h2><p class="walkthrough-description">${steps[step].text}</p><div class="walkthrough-actions"><button type="button" data-tour="${step ? 'back' : 'close'}">${step ? 'Back' : 'Skip'}</button><button type="button" class="walkthrough-next" data-tour="next">${step === steps.length - 1 ? 'Done' : 'Next'}${icon('ArrowRight', 16)}</button></div>`
-    const anchor =
-      article.querySelector(steps[step].target) ?? article.querySelector('.view-switch')
-    if (anchor && !anchor.matches('.selection-note'))
-      anchor.scrollIntoView?.({ block: 'center', behavior: 'instant' })
+    // Force a fresh target + scroll even if prepare only toggled a view.
+    target?.classList.remove('walkthrough-target')
+    target = null
     position()
-    note.querySelector('h2').focus({ preventScroll: true })
+    // Reposition after scroll/layout settle so the card does not cover the tabs.
+    requestAnimationFrame(() => {
+      position()
+      note.querySelector('h2')?.focus({ preventScroll: true })
+    })
   }
   note.addEventListener(
     'click',

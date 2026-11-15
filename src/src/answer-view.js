@@ -47,6 +47,14 @@ export class AnswerView {
     this.article.querySelector('h1').focus({ preventScroll: true })
     const options = { signal: this.events.signal }
     this.article.addEventListener(
+      'walkthrough-navigate',
+      () => {
+        this.glides.forEach((stop) => stop())
+        this.glides = []
+      },
+      options,
+    )
+    this.article.addEventListener(
       'walkthrough-complete',
       () => {
         this.closeDrawer()
