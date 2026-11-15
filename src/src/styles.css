@@ -287,6 +287,13 @@ textarea::placeholder {
   align-items: center;
   margin-top: 14px;
 }
+.upload-notice {
+  flex: 1;
+  margin: 0 12px;
+  color: #a9b9b0;
+  font-size: 11px;
+  line-height: 1.4;
+}
 .upload-button {
   display: grid;
   place-items: center;

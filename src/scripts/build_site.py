@@ -265,6 +265,7 @@ def build(output: Path):
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, target)
         shutil.copytree(SOURCE / "vendor", stage / "vendor")
+        shutil.copy2(SOURCE / "favicon.ico", stage / "favicon.ico")
         (stage / "src/data/paper-authors.json").write_text(
             json.dumps(author_index, ensure_ascii=False, separators=(",", ":")),
             encoding="utf-8",

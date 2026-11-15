@@ -20,7 +20,11 @@ def fingerprint():
         if p.is_file()
     ) + tuple(
         (str(p), p.stat().st_mtime_ns)
-        for p in (SOURCE / "index.html", PROJECT / "graph/causal_graph.yaml")
+        for p in (
+            SOURCE / "index.html",
+            SOURCE / "favicon.ico",
+            PROJECT / "graph/causal_graph.yaml",
+        )
     )
 
 

@@ -9,6 +9,7 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Understory - Restoration evidence</title>
+    <link rel="icon" href="./favicon.ico" sizes="16x16" />
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
@@ -37,14 +38,16 @@
             <label class="sr-only" for="question">Your restoration question</label>
             <textarea
               id="question"
-              placeholder="Upload literature and ask about ecological restoration…"
+              placeholder="Ask about ecological restoration…"
               maxlength="2000"
               spellcheck="true"
             ></textarea>
             <div class="composer-toolbar">
-              <label class="upload-button">
+              <label class="upload-button" title="Selected files are not processed or stored">
                 <input type="file" class="sr-only" multiple data-discard-upload />
-                <span class="sr-only">Attach files</span>
+                <span class="sr-only"
+                  >Choose files; selected files are not processed or stored</span
+                >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -58,6 +61,7 @@
                   ></path>
                 </svg>
               </label>
+              <span class="upload-notice" role="status" hidden></span>
               <button class="submit-button" type="submit" disabled aria-label="Submit question">
                 <span data-icon="ArrowUp" data-size="23"></span>
               </button>

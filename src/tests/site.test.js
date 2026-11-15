@@ -356,10 +356,15 @@ test('a fresh source-only checkout builds without node_modules or downloads', ()
       })
     }
     cpSync(join(root, 'src/index.html'), join(temporary, 'src/index.html'))
+    cpSync(join(root, 'src/favicon.ico'), join(temporary, 'src/favicon.ico'))
     cpSync(join(root, 'build.sh'), join(temporary, 'build.sh'))
     const run = spawnSync('sh', ['./build.sh', 'site'], { cwd: temporary, encoding: 'utf8' })
     assert.equal(run.status, 0, run.stderr)
     assert.ok(existsSync(join(temporary, 'site/vendor/dagre-3.1.3.js')))
+    assert.deepEqual(
+      readFileSync(join(temporary, 'site/favicon.ico')),
+      readFileSync(join(root, 'src/favicon.ico')),
+    )
     assert.deepEqual(
       JSON.parse(readFileSync(join(temporary, 'site/src/data/q1-graph-nodes.json'))),
       graph.nodes,

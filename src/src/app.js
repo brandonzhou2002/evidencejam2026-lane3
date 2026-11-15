@@ -195,7 +195,12 @@ document.addEventListener('input', (event) => {
     main.querySelector('.submit-button').disabled = !event.target.value.trim()
 })
 document.addEventListener('change', (event) => {
-  if (event.target.matches('[data-discard-upload]')) event.target.value = ''
+  if (event.target.matches('[data-discard-upload]')) {
+    event.target.value = ''
+    const notice = main.querySelector('.upload-notice')
+    notice.textContent = 'Files were discarded. They aren’t processed or stored.'
+    notice.hidden = false
+  }
 })
 document.addEventListener('keydown', (event) => {
   if (

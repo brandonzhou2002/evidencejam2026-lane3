@@ -104,6 +104,12 @@ requires no package installation, and makes no network calls.
 
 To get started, select **How this works** on the question page for an overview
 of the website.
+To ask a supported question, copy one of the exact questions listed below into
+the text box. Alternatively, enter any other question and submit it; the
+**Not available** pop-up lets you choose Tree planting, Created marshes, or
+Grassland restoration. Choosing an option fills the text box with its supported
+question so you can review it, then press **Submit** to open the answer.
+
 On an answer page, the same button opens step-by-step instructions beside the
 controls, showing how to follow summary sentences to findings, switch views,
 and open source papers.
