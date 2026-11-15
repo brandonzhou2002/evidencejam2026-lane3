@@ -125,11 +125,10 @@ export function renderCoverage(answer) {
   )
   const lookup = new Map(all.map((f) => [`${f.subject.id}|${f.outcome.id}`, f]))
   const densest = new Set(answer.summary.densest),
-    max = Math.max(...findings.map((f) => f.studies)),
     summary = answer.summary
   return `<section class="glance gap-map-section" aria-labelledby="map-title">${viewSwitch('Map')}<h2 id="map-title">Evidence map</h2><p class="section-hint" data-findings-hint>See where evidence is concentrated and where this map has gaps.</p><div data-table><div class="coverage">
     <p><strong>${summary.filled}</strong> of ${summary.cells} combinations studied · <strong>${summary.thin}</strong> by a single study · <strong>${summary.empty}</strong> with no mapped evidence</p>
-    <span class="map-legend" aria-hidden="true"><i class="d-thin"></i>1 study<i class="d-some"></i>2–3<i class="d-dense"></i>4+<i class="d-gap"></i><span title="${e(mappedGapNote)}">No mapped evidence</span><i class="d-densest"></i>${densest.size} most studied</span></div>
+    <div class="map-legend" role="group" aria-label="Study count legend"><span><i class="d-thin" aria-hidden="true"></i>1 study</span><span><i class="d-some" aria-hidden="true"></i>2–3 studies</span><span><i class="d-dense" aria-hidden="true"></i>4+ studies</span><span title="${e(mappedGapNote)}"><i class="d-gap" aria-hidden="true"></i>No mapped evidence</span><span><i class="d-densest" aria-hidden="true">★</i>${densest.size} most studied</span></div></div>
     <div class="gap-map-scroll"><table class="gap-map"><thead><tr><td></td>${columns.map((c) => `<th scope="col"><span title="${e(c.label)}">${labelWithTerms(c.label)}</span></th>`).join('')}</tr></thead><tbody>${rows
       .map(
         (row) =>
@@ -138,7 +137,7 @@ export function renderCoverage(answer) {
               const f = lookup.get(`${row.id}|${c.id}`)
               if (!f || !isFinding(f))
                 return `<td class="map-gap"${f ? ` ${linked(f.id)}` : ''} title="${e(`${row.label} × ${c.label}: ${mappedGapNote}`)}"><span class="sr-only">No mapped evidence</span></td>`
-              return `<td><button type="button" ${opener(f.id)} class="map-cell d-${f.density}${densest.has(f.id) ? ' densest' : ''}" ${linked(f.id)} style="--fill:${0.25 + (0.75 * f.studies) / max}" aria-label="${e(`${f.subject.label}, ${f.outcome.label}: ${studyCount(f.studies)}, ${directionLabel(f.direction)}, ${certaintyLabel(f.certainty)} certainty`)}">${f.studies}</button></td>`
+              return `<td><button type="button" ${opener(f.id)} class="map-cell d-${f.density}${densest.has(f.id) ? ' densest' : ''}" ${linked(f.id)} aria-label="${e(`${f.subject.label}, ${f.outcome.label}: ${studyCount(f.studies)}, ${directionLabel(f.direction)}, ${certaintyLabel(f.certainty)} certainty${densest.has(f.id) ? `, among the ${densest.size} most studied mapped pairings` : ''}`)}">${f.studies}${densest.has(f.id) ? '<span class="map-rank" aria-hidden="true">★</span>' : ''}</button></td>`
             })
             .join('')}</tr>`,
       )

@@ -1410,36 +1410,52 @@ h1.answer-question:focus {
   font-weight: 600;
 }
 .map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 12px;
+  color: #c3d0c9;
+}
+.map-legend > span {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
-  color: #a9b9b0;
 }
 .map-legend i {
-  width: 14px;
-  height: 14px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
   border-radius: 3px;
-  margin-left: 8px;
+  font-style: normal;
 }
-.d-thin {
-  --fill: 0.3;
+.map-cell.d-thin,
+.map-legend .d-thin {
+  background: repeating-linear-gradient(135deg, #243c4e 0 4px, #2e4b60 4px 5px);
+  color: #eef5f1;
+  border: 1px solid #789eb7;
 }
-.d-some {
-  --fill: 0.55;
+.map-cell.d-some,
+.map-legend .d-some {
+  background: #99c8ee;
+  color: #11221b;
 }
-.d-dense {
-  --fill: 1;
-}
-.map-legend i:not(.d-gap) {
-  background: rgb(164 237 200 / calc(var(--fill) * 0.55));
+.map-cell.d-dense,
+.map-legend .d-dense {
+  background: #e8c77a;
+  color: #11221b;
 }
 .map-legend .d-gap {
-  border: 1px dashed #4a5f54;
+  background: #0f1713;
+  border: 1px dashed #789182;
 }
-.map-legend i.d-densest {
-  background: rgb(164 237 200 / 0.3);
-  box-shadow: 0 0 0 1.5px #e6f9ee inset;
+.map-legend .d-densest {
+  background: #e8c77a;
+  color: #11221b;
+  box-shadow: 0 0 0 1.5px #11221b inset;
+  outline: 1px solid #ffefd1;
+  outline-offset: -1px;
+  font-size: 10px;
 }
 .gap-map-scroll {
   min-width: 0;
@@ -1484,7 +1500,8 @@ h1.answer-question:focus {
   padding: 0;
 }
 .map-gap {
-  border: 1px dashed #2d3d35;
+  border: 1px dashed #789182;
+  background: #0f1713;
   border-radius: 4px;
 }
 .map-gap.is-linked {
@@ -1492,6 +1509,7 @@ h1.answer-question:focus {
   box-shadow: none;
 }
 .map-cell {
+  position: relative;
   display: grid;
   place-items: center;
   width: 100%;
@@ -1499,8 +1517,7 @@ h1.answer-question:focus {
   padding: 0;
   border: 0;
   border-radius: 4px;
-  background: rgb(164 237 200 / calc(var(--fill) * 0.55));
-  color: #eef5f1;
+
   font-size: 12px;
   font-weight: 600;
   transition:
@@ -1512,7 +1529,20 @@ h1.answer-question:focus {
   transform: scale(1.12);
 }
 .map-cell.densest {
-  box-shadow: 0 0 0 1.5px #e6f9ee inset;
+  box-shadow: 0 0 0 1.5px #11221b inset;
+  outline: 1px solid #ffefd1;
+  outline-offset: -1px;
+}
+.map-rank {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 8px;
+  line-height: 1;
+}
+.map-cell:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
 }
 .map-cell.is-linked {
   box-shadow: 0 0 0 1px var(--mint) inset;
