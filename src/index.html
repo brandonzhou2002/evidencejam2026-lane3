@@ -3,12 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="theme-color" content="#0c1111" />
-    <meta name="description" content="Explore the evidence behind ecological restoration in Canada." />
+    <meta
+      name="description"
+      content="Explore the evidence behind ecological restoration in Canada."
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Understory - Restoration evidence</title>
+    <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="app-shell" id="app">
+      <div class="ambient-background" aria-hidden="true"><canvas id="terrain"></canvas></div>
+      <aside class="history-panel" id="history-panel" hidden></aside>
+      <header class="site-header" id="site-header">
+        <button class="about-button" type="button" data-action="about">
+          About the evidence <span data-icon="ArrowUpRight" data-size="15"></span>
+        </button>
+      </header>
+      <main id="main-content">
+        <div class="launch-content">
+          <h1>What does the <span>evidence say?</span></h1>
+          <form class="question-form" id="question-form">
+            <label class="sr-only" for="question">Your restoration question</label>
+            <textarea
+              id="question"
+              placeholder="Ask about ecological restoration…"
+              maxlength="2000"
+              spellcheck="true"
+            ></textarea>
+            <div class="composer-toolbar">
+              <button class="submit-button" type="submit" disabled aria-label="Submit question">
+                <span data-icon="ArrowUp" data-size="23"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
+      <footer class="site-footer">
+        <span>Evidence Jam <span class="footer-year">2026</span> · By Random Team</span>
+      </footer>
+    </div>
+    <dialog id="info-dialog" class="info-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-content" id="dialog-content">
+        <h2 id="dialog-title" tabindex="-1">About the evidence</h2>
+      </div>
+    </dialog>
+    <dialog id="certainty-dialog" class="certainty-dialog" aria-labelledby="certainty-heading">
+      <div class="certainty-dialog-content">
+        <button
+          class="certainty-dialog-close"
+          type="button"
+          aria-label="Close certainty explanation"
+          data-action="close-certainty"
+        >
+          <span data-icon="X" data-size="20"></span>
+        </button>
+        <h2 id="certainty-heading" tabindex="-1">Effect and certainty</h2>
+        <div id="certainty-explanation"></div>
+      </div>
+    </dialog>
+    <!-- STATIC_ANSWERS -->
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>

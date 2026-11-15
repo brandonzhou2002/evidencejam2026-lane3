@@ -10,24 +10,17 @@
     },
     {
       "text": "Created and restored marshes had lower growth, size and biomass than natural marshes, with high certainty.",
-      "finding_ids": [
-        "q2:created_marsh:growth_size"
-      ],
+      "finding_ids": ["q2:created_marsh:growth_size"],
       "gap_ids": []
     },
     {
       "text": "Species richness was lower in two of three studies, with moderate certainty.",
-      "finding_ids": [
-        "q2:created_marsh:richness_diversity"
-      ],
+      "finding_ids": ["q2:created_marsh:richness_diversity"],
       "gap_ids": []
     },
     {
       "text": "Plant cover and survival were also lower, but each rests on a single study, with very low and low certainty.",
-      "finding_ids": [
-        "q2:created_marsh:plant_cover",
-        "q2:created_marsh:survival_mortality"
-      ],
+      "finding_ids": ["q2:created_marsh:plant_cover", "q2:created_marsh:survival_mortality"],
       "gap_ids": []
     },
     {
