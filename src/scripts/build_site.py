@@ -269,6 +269,33 @@ def build(output: Path):
             encoding="utf-8",
         )
         (stage / "answers").mkdir()
+        (stage / "src/data/q1-graph-nodes.json").write_text(
+            json.dumps(
+                read(PROJECT / "answers/q1_tree_planting_graph.json")["nodes"],
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ),
+            encoding="utf-8",
+        )
+        q3 = bundles["q3-grassland-gaps"][0]
+        (stage / "answers/q3_grassland_gaps_overview.json").write_text(
+            json.dumps(
+                {**q3, "evidence": {}, "deferred_evidence": True},
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ),
+            encoding="utf-8",
+        )
+        (stage / "answers/sources").mkdir()
+        for finding in q3["findings"]:
+            (stage / "answers/sources" / (finding["id"].replace(":", "--") + ".json")).write_text(
+                json.dumps(
+                    {edge: q3["evidence"][edge] for edge in finding["edge_ids"]},
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ),
+                encoding="utf-8",
+            )
         for name in [*FILES.values(), "q1_tree_planting_graph"]:
             (stage / f"answers/{name}.json").write_text(
                 json.dumps(

@@ -58,6 +58,13 @@ Run that command from the repository root, or use `npm test` inside this
 folder. Tests use Node's built-in test runner; they require no packages.
 Node is not needed by the judges' build or by the published site.
 
+Q1 loads its graph data, renderer and Dagre only when Graph is selected, then
+caches them. A small node-label file generated from the supplied graph preserves
+the initial table's layout. Q3 initially loads an overview with the original
+findings and gaps; source excerpts are loaded and cached per finding when
+Sources opens. The build derives these files without changing the original
+answer JSON. Failed graph and excerpt requests can be retried independently.
+
 The Chart view is loaded only when selected and uses no extra library. Q1 and
 Q2 bars read `study_directions` and `studies` directly from the answer files;
 Q2 reference comparisons and age-related findings stay separate. Q3 bars use

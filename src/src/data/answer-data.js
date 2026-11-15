@@ -11,6 +11,35 @@ const files = {
   'q3-grassland-gaps': 'q3_grassland_gaps',
 }
 const cache = new Map()
+const sourceCache = new Map()
+let graphCache
+export function loadGraph() {
+  if (!graphCache) {
+    graphCache = Promise.all([
+      readJSON(new URL('../../answers/q1_tree_planting_graph.json', import.meta.url)),
+      import('../graph.js'),
+    ]).then(([graph, module]) => {
+      module.prepareGraph(graph)
+      return { graph, module }
+    })
+    graphCache.catch(() => {
+      graphCache = undefined
+    })
+  }
+  return graphCache
+}
+export function loadFindingEvidence(id) {
+  if (!/^q3:[a-z0-9_]+:[a-z0-9_]+$/.test(id))
+    return Promise.reject(new Error('Unknown evidence ID'))
+  if (!sourceCache.has(id)) {
+    const pending = readJSON(
+      new URL(`../../answers/sources/${id.replaceAll(':', '--')}.json`, import.meta.url),
+    )
+    sourceCache.set(id, pending)
+    pending.catch(() => sourceCache.delete(id))
+  }
+  return sourceCache.get(id)
+}
 let authorsCache
 export function loadPaperAuthors() {
   if (!authorsCache) {
@@ -38,12 +67,17 @@ export function loadAnswer(id) {
   if (!files[id]) return Promise.reject(new Error('Unknown question'))
   if (!cache.has(id)) {
     const pending = Promise.all([
-      readJSON(new URL(`../../answers/${files[id]}.json`, import.meta.url)),
+      readJSON(
+        new URL(
+          `../../answers/${files[id]}${id === 'q3-grassland-gaps' ? '_overview' : ''}.json`,
+          import.meta.url,
+        ),
+      ),
       readJSON(new URL(`./summaries/${id}.json`, import.meta.url)),
       id === 'q1-tree-planting'
-        ? readJSON(new URL('../../answers/q1_tree_planting_graph.json', import.meta.url))
+        ? readJSON(new URL('./q1-graph-nodes.json', import.meta.url))
         : undefined,
-    ]).then(([answer, summary, graph]) => ({ answer, summary, graph }))
+    ]).then(([answer, summary, nodes]) => ({ answer, summary, nodes }))
     cache.set(id, pending)
     pending.catch(() => cache.delete(id))
   }

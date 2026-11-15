@@ -1,17 +1,24 @@
-import { renderDetails, renderDrawer, renderHeadline, renderTakeaways } from './render.js'
+import {
+  renderDetails,
+  renderDrawer,
+  renderHeadline,
+  renderTakeaways,
+  renderSources,
+} from './render.js'
 import { escapeHTML as e, glide, reducedMotion, sentenceIds } from './ui.js'
 import { icon } from './icons.js'
-import { loadPaperAuthors, paperCitation } from './data/answer-data.js'
+import { loadPaperAuthors, paperCitation, loadFindingEvidence } from './data/answer-data.js'
 
 export class AnswerView {
   constructor(
     container,
     bundle,
     question,
-    { graphModule = null, onDisplayed = () => {}, onExplain = () => {} } = {},
+    { onLoadGraph, onDisplayed = () => {}, onExplain = () => {} } = {},
   ) {
     this.bundle = bundle
-    this.graphModule = graphModule
+    this.graphModule = bundle.graphModule ?? null
+    this.onLoadGraph = onLoadGraph
     this.onExplain = onExplain
     this.events = new AbortController()
     this.pinned = null
@@ -28,9 +35,9 @@ export class AnswerView {
     for (const item of answer.gaps) this.records.set(item.id, { kind: 'gap', item })
     for (const item of answer.interactions ?? [])
       this.records.set(item.edge_id, { kind: 'claim', id: item.edge_id, direction: item.direction })
-    if (graph && graphModule)
+    if (graph && this.graphModule)
       for (const item of [...graph.edges, ...graph.gaps])
-        this.records.set(item.id, graphModule.graphFinding(item, graph))
+        this.records.set(item.id, this.graphModule.graphFinding(item, graph))
     container.innerHTML = `<article class="answer-view"><h1 tabindex="-1" class="answer-question">${e(question.question)}</h1>${renderHeadline(answer)}<div class="summary-section"><p class="section-hint">What the studies tell us overall.</p><div class="takeaways"></div></div><div class="answer-details"></div><aside class="selection-note" role="region" aria-label="Selected summary sentence" hidden><p aria-live="polite"></p><button type="button" data-clear-selection aria-label="Clear selection and return to summary" title="Return to summary">${icon('X', 18)}</button></aside><aside id="evidence-drawer" class="evidence-drawer" role="dialog" aria-label="Evidence" aria-hidden="true" inert></aside></article>`
     this.article = container.querySelector('article')
     this.takeaways = this.article.querySelector('.takeaways')
@@ -88,7 +95,10 @@ export class AnswerView {
       options,
     )
     this.takeaways.innerHTML = renderTakeaways(bundle.summary.sentences)
-    this.details.innerHTML = renderDetails(answer, graph)
+    this.details.innerHTML = renderDetails(
+      answer,
+      graph ?? (bundle.nodes ? { nodes: bundle.nodes } : null),
+    )
     this.updateHighlights()
     onDisplayed()
   }
@@ -99,7 +109,8 @@ export class AnswerView {
     if (target.hasAttribute('data-certainty')) {
       const record = this.records.get(target.dataset.certainty)
       if (record?.kind === 'finding') this.onExplain(record.item, target)
-    } else if (target.hasAttribute('data-clear-selection')) this.clearSelection()
+    } else if (target.hasAttribute('data-retry-sources')) this.ensureSources(this.openedId)
+    else if (target.hasAttribute('data-clear-selection')) this.clearSelection()
     else if (target.hasAttribute('data-close-drawer')) this.closeDrawer()
     else if (target.hasAttribute('data-view')) this.switchView(target.dataset.view)
     else if (target.hasAttribute('data-open')) this.open(target.dataset.open, target)
@@ -261,19 +272,30 @@ export class AnswerView {
       }
       if (request !== this.viewRequest) return
     }
-    if (view === 'graph' && !graphHost.childElementCount) {
-      if (!this.graphModule) {
-        graphHost.innerHTML =
-          '<div class="graph-error" role="alert"><p>The graph could not be displayed. The table and its evidence are still available.</p><button type="button" data-view="table">Back to table</button></div>'
-      } else {
-        try {
-          graphHost.innerHTML = this.graphModule.renderGraph(this.bundle.graph)
-        } catch (error) {
-          console.error(error)
-          graphHost.innerHTML =
-            '<div class="graph-error" role="alert"><p>The graph could not be displayed. The table and its evidence are still available.</p><button type="button" data-view="table">Back to table</button></div>'
+    if (view === 'graph' && graphHost && !graphHost.dataset.ready) {
+      const button = this.details.querySelector('.view-switch [data-view="graph"]')
+      button.setAttribute('aria-busy', 'true')
+      try {
+        if (!this.graphModule) {
+          const { graph, module } = await this.onLoadGraph()
+          if (this.events.signal.aborted) return
+          this.bundle.graph = graph
+          this.bundle.graphModule = this.graphModule = module
+          this.evidence = { ...this.evidence, ...graph.evidence }
+          for (const item of [...graph.edges, ...graph.gaps])
+            this.records.set(item.id, module.graphFinding(item, graph))
         }
+        graphHost.innerHTML = this.graphModule.renderGraph(this.bundle.graph)
+        graphHost.dataset.ready = 'true'
+      } catch (error) {
+        if (this.events.signal.aborted) return
+        console.error(error)
+        graphHost.innerHTML =
+          '<div class="graph-error" role="alert"><p>The graph could not be displayed. The other views are still available.</p><button type="button" data-view="graph">Try again</button><button type="button" data-view="table">Back to table</button></div>'
+      } finally {
+        button.removeAttribute('aria-busy')
       }
+      if (request !== this.viewRequest) return
     }
     table.hidden = view !== 'table'
     if (graphHost) graphHost.hidden = view !== 'graph'
@@ -315,6 +337,7 @@ export class AnswerView {
     this.openedId = id
     this.trigger = trigger
     this.drawer.innerHTML = renderDrawer(opened, this.evidence, this.paperAuthors)
+    if (opened.kind === 'finding' && this.bundle.answer.deferred_evidence) this.ensureSources(id)
     this.drawer.setAttribute('aria-labelledby', 'drawer-title')
     this.drawer.removeAttribute('aria-label')
     this.drawer.inert = false
@@ -337,6 +360,30 @@ export class AnswerView {
           }
         })
         .catch(() => {})
+    }
+  }
+
+  async ensureSources(id) {
+    const opened = this.records.get(id)
+    if (opened?.kind !== 'finding' || opened.item.edge_ids.every((edge) => this.evidence[edge]))
+      return
+    const target = this.drawer.querySelector('[data-sources]')
+    if (!target) return
+    target.innerHTML = '<h3>Sources</h3><p role="status">Loading source excerpts…</p>'
+    try {
+      const evidence = await loadFindingEvidence(id)
+      this.evidence = { ...this.evidence, ...evidence }
+      if (this.events.signal.aborted || this.openedId !== id) return
+      target.outerHTML = renderSources(
+        opened.item.edge_ids,
+        this.evidence,
+        false,
+        this.paperAuthors,
+      )
+    } catch (error) {
+      if (this.events.signal.aborted || this.openedId !== id) return
+      target.innerHTML =
+        '<h3>Sources</h3><p role="alert">The source excerpts could not be loaded.</p><button type="button" data-retry-sources>Try again</button>'
     }
   }
 

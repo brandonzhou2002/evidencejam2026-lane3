@@ -1,5 +1,5 @@
 import { AnswerView } from './answer-view.js'
-import { readJSON, loadAnswer } from './data/answer-data.js'
+import { readJSON, loadAnswer, loadGraph } from './data/answer-data.js'
 import {
   directionExplanation,
   certaintyExplanation,
@@ -34,8 +34,7 @@ let questions = [],
   questionText = '',
   sequence = 0
 let modalTrigger = null,
-  certaintyTrigger = null,
-  graphPending = null
+  certaintyTrigger = null
 const terrain = startTerrain(document.querySelector('#terrain'))
 const questionsReady = readJSON(new URL('./data/questions.json', import.meta.url)).then((data) => {
   questions = data
@@ -51,15 +50,6 @@ const illustration = fetch(new URL('./assets/field-work.html', import.meta.url))
 function fillIcons(root = document) {
   for (const element of root.querySelectorAll('[data-icon]'))
     element.innerHTML = icon(element.dataset.icon, Number(element.dataset.size ?? 24))
-}
-function graphModule() {
-  if (!graphPending) {
-    graphPending = import('./graph.js')
-    graphPending.catch(() => {
-      graphPending = null
-    })
-  }
-  return graphPending
 }
 function syncChrome() {
   syncPause()
@@ -128,34 +118,23 @@ async function openQuestion(question, entry = null) {
   main.innerHTML = ''
   syncChrome()
   window.scrollTo(0, 0)
-  const module = question.id === 'q1-tree-planting' ? graphModule() : Promise.resolve(null)
   const bundlePromise = loadAnswer(question.id)
-  // Start both local reads together; prepare the graph during the existing transition.
-  const graphReady = Promise.all([bundlePromise, module])
-    .then(([bundle, graph]) => {
-      if (graph) graph.prepareGraph(bundle.graph)
-      return graph
-    })
-    .catch((error) => {
-      console.error(error)
-      return null
-    })
+  bundlePromise.catch(() => {})
   if (!instant) {
     const drawing = await illustration
     if (token !== sequence) return
     main.innerHTML = drawing
   }
   try {
-    const [bundle, graph] = await Promise.all([
+    const [bundle] = await Promise.all([
       bundlePromise,
-      graphReady,
       instant ? null : new Promise((resolve) => setTimeout(resolve, reducedMotion() ? 500 : 3600)),
     ])
     if (token !== sequence) return
     loading = false
     syncChrome()
     view = new AnswerView(main, bundle, question, {
-      graphModule: graph,
+      onLoadGraph: loadGraph,
       onExplain: explain,
       onDisplayed: () => {
         if (token !== sequence || history.some((item) => item.key === activeEntry.key)) return

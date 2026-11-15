@@ -25,7 +25,14 @@ import {
 import { prepareGraph, renderGraph, graphFinding } from '../src/graph.js'
 import { version } from '../vendor/dagre-3.1.3.js'
 import { escapeHTML, normalizeQuestion, sentenceIds } from '../src/ui.js'
-import { cleanQuote, loadAnswer, loadPaperAuthors, paperCitation } from '../src/data/answer-data.js'
+import {
+  cleanQuote,
+  loadAnswer,
+  loadGraph,
+  loadFindingEvidence,
+  loadPaperAuthors,
+  paperCitation,
+} from '../src/data/answer-data.js'
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)))
 const read = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'))
@@ -192,6 +199,20 @@ test('answer reads are cached and failures can be retried without any external r
     calls.push(String(url))
     if (fail) return { ok: false, status: 503 }
     const name = new URL(url).pathname.split('/').at(-1)
+    if (name === 'q1-graph-nodes.json') return { ok: true, json: async () => graph.nodes }
+    if (name === 'q3_grassland_gaps_overview.json')
+      return {
+        ok: true,
+        json: async () => ({ ...answers[2], evidence: {}, deferred_evidence: true }),
+      }
+    if (name.startsWith('q3--')) {
+      const finding = answers[2].findings.find((f) => f.id.replaceAll(':', '--') + '.json' === name)
+      return {
+        ok: true,
+        json: async () =>
+          Object.fromEntries(finding.edge_ids.map((id) => [id, answers[2].evidence[id]])),
+      }
+    }
     const path = name.includes('-') ? `src/src/data/summaries/${name}` : `answers/${name}`
     return { ok: true, json: async () => read(path) }
   }
@@ -202,7 +223,33 @@ test('answer reads are cached and failures can be retried without any external r
     assert.strictEqual(loadAnswer('q1-tree-planting'), pending)
     const result = await pending
     assert.equal(result.answer.id, 'q1-tree-planting')
-    assert.equal(result.graph.nodes.length, 12)
+    assert.equal(result.graph, undefined)
+    assert.deepEqual(result.nodes, graph.nodes)
+    assert.equal(
+      renderDetails(result.answer, { nodes: result.nodes }),
+      renderDetails(result.answer, graph),
+    )
+    assert.equal(calls.filter((url) => url.endsWith('q1_tree_planting_graph.json')).length, 0)
+    const deferredGraph = loadGraph()
+    assert.strictEqual(loadGraph(), deferredGraph)
+    assert.deepEqual((await deferredGraph).graph, graph)
+    const overview = await loadAnswer('q3-grassland-gaps')
+    assert.deepEqual(overview.answer.evidence, {})
+    assert.equal(calls.filter((url) => url.includes('/sources/')).length, 0)
+    const finding = answers[2].findings[0]
+    fail = true
+    await assert.rejects(loadFindingEvidence(finding.id), /503/)
+    fail = false
+    const sources = loadFindingEvidence(finding.id)
+    assert.strictEqual(loadFindingEvidence(finding.id), sources)
+    assert.deepEqual(
+      await sources,
+      Object.fromEntries(finding.edge_ids.map((id) => [id, answers[2].evidence[id]])),
+    )
+    const count = calls.length
+    await loadFindingEvidence(finding.id)
+    await loadGraph()
+    assert.equal(calls.length, count)
     assert.ok(calls.every((url) => url.startsWith('file:')))
   } finally {
     globalThis.fetch = original
@@ -255,6 +302,21 @@ test('a fresh source-only checkout builds without node_modules or downloads', ()
     const run = spawnSync('sh', ['./build.sh', 'site'], { cwd: temporary, encoding: 'utf8' })
     assert.equal(run.status, 0, run.stderr)
     assert.ok(existsSync(join(temporary, 'site/vendor/dagre-3.1.3.js')))
+    assert.deepEqual(
+      JSON.parse(readFileSync(join(temporary, 'site/src/data/q1-graph-nodes.json'))),
+      graph.nodes,
+    )
+    const overview = JSON.parse(
+      readFileSync(join(temporary, 'site/answers/q3_grassland_gaps_overview.json')),
+    )
+    assert.deepEqual(overview, { ...answers[2], evidence: {}, deferred_evidence: true })
+    for (const finding of answers[2].findings) {
+      const filename = finding.id.replaceAll(':', '--') + '.json'
+      assert.deepEqual(
+        JSON.parse(readFileSync(join(temporary, 'site/answers/sources', filename))),
+        Object.fromEntries(finding.edge_ids.map((id) => [id, answers[2].evidence[id]])),
+      )
+    }
     const authorIndex = JSON.parse(
       readFileSync(join(temporary, 'site/src/data/paper-authors.json')),
     )

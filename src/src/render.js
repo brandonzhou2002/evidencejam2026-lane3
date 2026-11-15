@@ -158,7 +158,7 @@ export function renderDetails(answer, graph) {
 export function renderSources(edgeIds, evidence, titled = false, authors = {}) {
   const papers = papersFor(edgeIds, evidence),
     quotes = papers.reduce((sum, paper) => sum + paper.claims.length, 0)
-  return `<section class="drawer-section"><h3>Sources</h3><p class="section-hint">Read the source sentences and open the original papers.</p>${titled ? '' : `<p class="sources-count">${quotes} ${quotes === 1 ? 'quote' : 'quotes'} from ${papers.length} ${papers.length === 1 ? 'paper' : 'papers'}</p>`}
+  return `<section class="drawer-section" data-sources><h3>Sources</h3><p class="section-hint">Read the source sentences and open the original papers.</p>${titled ? '' : `<p class="sources-count">${quotes} ${quotes === 1 ? 'quote' : 'quotes'} from ${papers.length} ${papers.length === 1 ? 'paper' : 'papers'}</p>`}
     <ol class="papers">${papers
       .map(
         (
