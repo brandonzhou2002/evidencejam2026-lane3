@@ -66,10 +66,10 @@ function Planter() {
           <circle className="fw-skin" cx="-.4" cy="13.6" r="1.7" />
         </g>
       </g>
-      <path className="fw-body" d={torso} />
       <g transform="translate(0 -21)">
         <g className="fw-leg"><Leg hip={[0, 0]} foot={[0, 19]} /></g>
       </g>
+      <path className="fw-body" d={torso} />
       <Head x={1} y={-43.5} />
       <path className="fw-can" d="M8.6 -27.6 H18.6 L17.6 -18.6 H9.6 Z" />
       <path className="fw-tool" d="M10 -27.6 Q13.6 -33.4 17.2 -27.6 M17.8 -22.4 L25.4 -28.4" />
@@ -102,8 +102,8 @@ function Surveyor() {
   return <>
     <Leg hip={[-.6, -21]} foot={[-2, -2.2]} back />
     <path className="fw-limb fw-sleeve fw-back" d="M-.8 -35.5 L1.6 -29.2 L7 -29.6" />
-    <path className="fw-body" d={torso} />
     <Leg hip={[.8, -21]} foot={[2.2, -2.2]} />
+    <path className="fw-body" d={torso} />
     <g transform="translate(1 -40)">
       <g className="fw-nod"><Head x={0} y={-3.5} /></g>
     </g>
