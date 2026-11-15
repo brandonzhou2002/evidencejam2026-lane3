@@ -62,6 +62,7 @@ export class AnswerView {
       options,
     )
     this.article.addEventListener('click', (event) => this.click(event), options)
+    this.drawer.addEventListener('keydown', (event) => this.drawerKeydown(event), options)
     this.article.addEventListener(
       'change',
       (event) => {
@@ -167,10 +168,20 @@ export class AnswerView {
     this.glides.forEach((stop) => stop())
     this.glides = []
     if (this.pinned === null) return
+    if (this.openedId) this.closeDrawer()
     const targets = [...this.details.querySelectorAll('.is-linked')].filter(
       (element) => element.getClientRects().length,
     )
     if (!targets.length) return
+    const focusTarget =
+      targets
+        .flatMap((target) => [target, ...target.querySelectorAll('button, a[href]')])
+        .find((target) => target.matches('button, a[href]') && target.getClientRects().length) ??
+      targets.find((target) => target instanceof HTMLElement)
+    if (focusTarget) {
+      if (!focusTarget.matches('button, a[href]')) focusTarget.setAttribute('tabindex', '-1')
+      focusTarget.focus({ preventScroll: true })
+    }
     for (const chart of new Set(
       targets.map((target) => target.closest('.chart-rows')).filter(Boolean),
     )) {
@@ -399,6 +410,37 @@ export class AnswerView {
       if (this.events.signal.aborted || this.openedId !== id) return
       target.innerHTML =
         '<h3>Sources</h3><p role="alert">The source excerpts could not be loaded.</p><button type="button" data-retry-sources>Try again</button>'
+    }
+  }
+
+  drawerKeydown(event) {
+    if (!this.openedId) return
+    if (event.key === 'F6') {
+      event.preventDefault()
+      this.closeDrawer()
+      return
+    }
+    if (event.key !== 'Tab') return
+    const controls = [
+      ...this.drawer.querySelectorAll(
+        'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+      ),
+    ].filter(
+      (control) =>
+        control.tabIndex >= 0 &&
+        control.getClientRects().length &&
+        window.getComputedStyle(control).visibility !== 'hidden',
+    )
+    const index = controls.indexOf(document.activeElement)
+    if (!controls.length) {
+      event.preventDefault()
+      this.drawer.querySelector('h2').focus({ preventScroll: true })
+    } else if (event.shiftKey && index <= 0) {
+      event.preventDefault()
+      controls.at(-1).focus()
+    } else if (!event.shiftKey && (index === -1 || index === controls.length - 1)) {
+      event.preventDefault()
+      controls[0].focus()
     }
   }
 

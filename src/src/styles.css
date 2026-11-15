@@ -710,10 +710,14 @@ h1.answer-question:focus {
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 }
-.takeaways [role='button']:hover,
+.takeaways [role='button']:hover {
+  color: var(--mint);
+}
 .takeaways [role='button']:focus-visible {
   color: var(--mint);
-  outline: none;
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 .takeaways [role='button'][aria-pressed='true'] {
   color: var(--mint);
@@ -916,7 +920,7 @@ h1.answer-question:focus {
   line-height: 1.5;
 }
 .is-dimmed {
-  opacity: 0.3;
+  opacity: 1;
 }
 .is-linked {
   box-shadow:
@@ -2692,7 +2696,14 @@ h1.answer-question:focus {
   color: #8fa699;
 }
 .graph-node.is-faded {
-  opacity: 0.3;
+  opacity: 1;
+}
+.graph-frame:has(.graph-node.is-faded) .graph-node:not(.is-faded),
+.graph-frame:has(.graph-node.is-faded) .graph-label:not(.is-faded) {
+  border-color: var(--mint);
+}
+.graph-frame:has(.graph-node.is-faded) .graph-edge:not(.is-faded) {
+  stroke: var(--mint);
 }
 .graph-header {
   display: block;
@@ -2724,7 +2735,8 @@ h1.answer-question:focus {
 }
 .graph-edge.is-dimmed,
 .graph-edge.is-faded {
-  opacity: 0.18;
+  opacity: 1;
+  stroke: #557364;
 }
 .graph-edge.is-selected {
   stroke: #7fae96;
@@ -2809,7 +2821,7 @@ h1.answer-question:focus {
 }
 .graph-label.is-dimmed,
 .graph-label.is-faded {
-  opacity: 0.25;
+  opacity: 1;
 }
 .graph-label:focus-visible {
   outline-offset: 2px;
