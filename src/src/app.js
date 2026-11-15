@@ -146,7 +146,6 @@ async function openQuestion(question, entry = null) {
     loading = false
     syncChrome()
     view = new AnswerView(main, bundle, question, {
-      instant,
       graphModule: graph,
       onExplain: explain,
       onDisplayed: () => {

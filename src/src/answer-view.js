@@ -6,7 +6,7 @@ export class AnswerView {
     container,
     bundle,
     question,
-    { instant = false, graphModule = null, onDisplayed = () => {}, onExplain = () => {} } = {},
+    { graphModule = null, onDisplayed = () => {}, onExplain = () => {} } = {},
   ) {
     this.bundle = bundle
     this.graphModule = graphModule
@@ -29,7 +29,7 @@ export class AnswerView {
     if (graph && graphModule)
       for (const item of [...graph.edges, ...graph.gaps])
         this.records.set(item.id, graphModule.graphFinding(item, graph))
-    container.innerHTML = `<article class="answer-view${instant ? ' is-instant' : ''}"><h1 tabindex="-1" class="answer-question">${e(question.question)}</h1>${renderHeadline(answer)}<div class="takeaways"></div><div class="answer-details"></div><aside id="evidence-drawer" class="evidence-drawer" role="dialog" aria-label="Evidence" aria-hidden="true" inert></aside></article>`
+    container.innerHTML = `<article class="answer-view"><h1 tabindex="-1" class="answer-question">${e(question.question)}</h1>${renderHeadline(answer)}<div class="takeaways"></div><div class="answer-details"></div><aside id="evidence-drawer" class="evidence-drawer" role="dialog" aria-label="Evidence" aria-hidden="true" inert></aside></article>`
     this.article = container.querySelector('article')
     this.takeaways = this.article.querySelector('.takeaways')
     this.details = this.article.querySelector('.answer-details')

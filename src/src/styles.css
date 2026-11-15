@@ -126,6 +126,15 @@ a:focus-visible {
     color 160ms,
     border-color 160ms;
 }
+.about-button > [data-icon] {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+.about-button svg {
+  display: block;
+  flex-shrink: 0;
+}
 .about-button:hover {
   color: var(--mint);
   border-color: var(--mint);
@@ -521,10 +530,13 @@ main.answer-main {
 .answer-view {
   max-width: 1180px;
   margin: 0 auto;
-  animation: answer-appear 0.35s ease-out both;
+  animation: answer-appear 0.8s ease-in-out both;
 }
-.answer-view.is-instant {
-  animation: none;
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the requested opacity fade; movement and looping effects remain disabled. */
+  .answer-view {
+    animation: answer-appear 0.8s ease-in-out both !important;
+  }
 }
 @keyframes answer-appear {
   from {
