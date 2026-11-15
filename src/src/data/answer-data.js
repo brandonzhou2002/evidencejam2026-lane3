@@ -11,6 +11,23 @@ const files = {
   'q3-grassland-gaps': 'q3_grassland_gaps',
 }
 const cache = new Map()
+let authorsCache
+export function loadPaperAuthors() {
+  if (!authorsCache) {
+    authorsCache = readJSON(new URL('./paper-authors.json', import.meta.url))
+    authorsCache.catch(() => {
+      authorsCache = undefined
+    })
+  }
+  return authorsCache
+}
+export function paperCitation(paper, authors = {}) {
+  const author = authors[paper.id]
+  const name = author?.first?.split(',')[0].trim()
+  return [name ? `${name}${author.count > 1 ? ' et al.' : ''}` : '', paper.year ?? '']
+    .filter(Boolean)
+    .join(' · ')
+}
 export async function readJSON(url) {
   const response = await fetch(url)
   if (!response.ok)

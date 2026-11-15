@@ -1,6 +1,7 @@
 import { renderDetails, renderDrawer, renderHeadline, renderTakeaways } from './render.js'
 import { escapeHTML as e, glide, reducedMotion, sentenceIds } from './ui.js'
 import { icon } from './icons.js'
+import { loadPaperAuthors, paperCitation } from './data/answer-data.js'
 
 export class AnswerView {
   constructor(
@@ -249,7 +250,7 @@ export class AnswerView {
     clearTimeout(this.closeTimer)
     this.openedId = id
     this.trigger = trigger
-    this.drawer.innerHTML = renderDrawer(opened, this.evidence)
+    this.drawer.innerHTML = renderDrawer(opened, this.evidence, this.paperAuthors)
     this.drawer.setAttribute('aria-labelledby', 'drawer-title')
     this.drawer.removeAttribute('aria-label')
     this.drawer.inert = false
@@ -258,6 +259,21 @@ export class AnswerView {
     this.drawer.querySelector('h2').focus({ preventScroll: true })
     this.drawer.querySelector('.drawer-body').scrollTop = 0
     this.updateHighlights()
+    if (opened.kind !== 'gap' && !this.paperAuthors) {
+      loadPaperAuthors()
+        .then((authors) => {
+          this.paperAuthors = authors
+          if (this.events.signal.aborted || this.openedId !== id) return
+          for (const label of this.drawer.querySelectorAll('[data-paper-citation]')) {
+            label.textContent = paperCitation(
+              { id: label.dataset.paperCitation, year: label.dataset.year },
+              authors,
+            )
+            label.hidden = !label.textContent
+          }
+        })
+        .catch(() => {})
+    }
   }
 
   closeDrawer() {

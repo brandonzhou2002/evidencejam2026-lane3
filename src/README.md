@@ -56,3 +56,9 @@ node --test src/tests/*.test.js
 Run that command from the repository root, or use `npm test` inside this
 folder. Tests use Node's built-in test runner; they require no packages.
 Node is not needed by the judges' build or by the published site.
+
+The build extracts the first author and author count for cited papers directly
+from `graph/causal_graph.yaml` into a compact `paper-authors.json` file. Sources
+loads this local metadata only on first opening and formats citations from it;
+author names are not manually entered in the UI. The extraction uses only
+Python's standard library and the supplied graph's metadata serialization.

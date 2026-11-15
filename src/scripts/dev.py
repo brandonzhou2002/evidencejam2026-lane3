@@ -18,7 +18,10 @@ def fingerprint():
         for root in (SOURCE / "src", SOURCE / "vendor", PROJECT / "answers")
         for p in sorted(root.rglob("*"))
         if p.is_file()
-    ) + ((str(SOURCE / "index.html"), (SOURCE / "index.html").stat().st_mtime_ns),)
+    ) + tuple(
+        (str(p), p.stat().st_mtime_ns)
+        for p in (SOURCE / "index.html", PROJECT / "graph/causal_graph.yaml")
+    )
 
 
 build(output)

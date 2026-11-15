@@ -8,6 +8,7 @@ import {
   hasBreakdown,
   isFinding,
   papersFor,
+  paperCitation,
   studyBreakdown,
   studyCount,
   uniqueLabels,
@@ -149,7 +150,7 @@ export function renderDetails(answer, graph) {
   return limits + view
 }
 
-export function renderSources(edgeIds, evidence, titled = false) {
+export function renderSources(edgeIds, evidence, titled = false, authors = {}) {
   const papers = papersFor(edgeIds, evidence),
     quotes = papers.reduce((sum, paper) => sum + paper.claims.length, 0)
   return `<section class="drawer-section"><h3>Sources</h3>${titled ? '' : `<p class="sources-count">${quotes} ${quotes === 1 ? 'quote' : 'quotes'} from ${papers.length} ${papers.length === 1 ? 'paper' : 'papers'}</p>`}
@@ -157,20 +158,20 @@ export function renderSources(edgeIds, evidence, titled = false) {
       .map(
         (
           paper,
-        ) => `<li><p class="paper-title">${paper.doi ? `<a href="https://doi.org/${e(paper.doi)}" target="_blank" rel="noreferrer">${e(paper.title)}<span role="img" aria-label="(opens the paper in a new tab)">${icon('ArrowUpRight', 13)}</span></a>` : e(paper.title)}${paper.year ? `<span>${e(paper.year)}</span>` : ''}</p>
+        ) => `<li><p class="paper-title">${paper.doi ? `<a href="https://doi.org/${e(paper.doi)}" target="_blank" rel="noreferrer">${e(paper.title)}<span role="img" aria-label="(opens the paper in a new tab)">${icon('ArrowUpRight', 13)}</span></a>` : e(paper.title)}<span data-paper-citation="${e(paper.id)}" data-year="${e(paper.year ?? '')}"${paperCitation(paper, authors) ? '' : ' hidden'}>${e(paperCitation(paper, authors))}</span></p>
       <ul class="claims">${paper.claims.map((claim) => `<li><blockquote>“${e(cleanQuote(claim.quote ?? ''))}”</blockquote>${titled ? '' : `<span class="claim-line">${claimText(claim)}</span>`}</li>`).join('')}</ul></li>`,
       )
       .join('')}</ol></section>`
 }
 
-export function renderDrawer(opened, evidence) {
+export function renderDrawer(opened, evidence, authors = {}) {
   const title =
     opened.kind === 'claim'
       ? claimText(evidence[opened.id])
       : `${e(opened.item.subject.label)}<span>${e(opened.item.outcome.label)}</span>`
   let content
   if (opened.kind === 'claim')
-    content = `<div class="drawer-summary">${direction(opened.direction)}</div>${renderSources([opened.id], evidence, true)}`
+    content = `<div class="drawer-summary">${direction(opened.direction)}</div>${renderSources([opened.id], evidence, true, authors)}`
   else if (opened.kind === 'gap')
     content = `<div class="drawer-summary"><span class="drawer-gap">No evidence found</span><p>${e(noEvidenceNote)}</p></div><section class="drawer-section"><h3>What was searched for</h3><p>${e(opened.item.searched_for)}</p></section>`
   else {
@@ -180,7 +181,7 @@ export function renderDrawer(opened, evidence) {
         finding.certainty_rationale,
       )
         .map((reason) => `<li>${e(reason)}</li>`)
-        .join('')}</ul></section>${renderSources(finding.edge_ids, evidence)}`
+        .join('')}</ul></section>${renderSources(finding.edge_ids, evidence, false, authors)}`
   }
   return `<div class="drawer-head"><h2 id="drawer-title" tabindex="-1"${opened.kind === 'claim' ? ' class="is-claim"' : ''}>${title}</h2><button type="button" class="drawer-close" data-close-drawer aria-label="Close evidence">${icon('X', 20)}</button></div><div class="drawer-body">${content}</div>`
 }

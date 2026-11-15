@@ -25,7 +25,7 @@ import {
 import { prepareGraph, renderGraph, graphFinding } from '../src/graph.js'
 import { version } from '../vendor/dagre-3.1.3.js'
 import { escapeHTML, normalizeQuestion, sentenceIds } from '../src/ui.js'
-import { cleanQuote, loadAnswer } from '../src/data/answer-data.js'
+import { cleanQuote, loadAnswer, loadPaperAuthors, paperCitation } from '../src/data/answer-data.js'
 
 const root = resolve(fileURLToPath(new URL('../../', import.meta.url)))
 const read = (path) => JSON.parse(readFileSync(join(root, path), 'utf8'))
@@ -210,10 +210,40 @@ test('answer reads are cached and failures can be retried without any external r
   }
 })
 
+test('author metadata is cached and citations are formatted from paper IDs', async () => {
+  const original = globalThis.fetch
+  const paper = Object.values(answers[0].evidence)[0]
+  const metadata = { [paper.document_id]: { first: 'van der Meer, Jane', count: 3 } }
+  let requests = 0
+  globalThis.fetch = async () => {
+    requests++
+    return { ok: true, json: async () => metadata }
+  }
+  try {
+    const pending = loadPaperAuthors()
+    assert.strictEqual(loadPaperAuthors(), pending)
+    assert.deepEqual(await pending, metadata)
+    await loadPaperAuthors()
+    assert.equal(requests, 1)
+    assert.equal(
+      paperCitation({ id: paper.document_id, year: 2020 }, metadata),
+      'van der Meer et al. · 2020',
+    )
+    assert.equal(paperCitation({ id: 'missing', year: 2020 }, metadata), '2020')
+    assert.equal(paperCitation({ id: 'missing' }, metadata), '')
+    const edge = Object.keys(answers[0].evidence)[0]
+    assert.ok(
+      renderSources([edge], answers[0].evidence, false, metadata).includes('van der Meer et al.'),
+    )
+  } finally {
+    globalThis.fetch = original
+  }
+})
+
 test('a fresh source-only checkout builds without node_modules or downloads', () => {
   const temporary = mkdtempSync(join(tmpdir(), 'understory-clean-'))
   try {
-    for (const dir of ['answers', 'src/src', 'src/vendor', 'src/scripts']) {
+    for (const dir of ['answers', 'graph', 'src/src', 'src/vendor', 'src/scripts']) {
       mkdirSync(join(temporary, dir), { recursive: true })
       cpSync(join(root, dir), join(temporary, dir), {
         recursive: true,
@@ -225,6 +255,19 @@ test('a fresh source-only checkout builds without node_modules or downloads', ()
     const run = spawnSync('sh', ['./build.sh', 'site'], { cwd: temporary, encoding: 'utf8' })
     assert.equal(run.status, 0, run.stderr)
     assert.ok(existsSync(join(temporary, 'site/vendor/dagre-3.1.3.js')))
+    const authorIndex = JSON.parse(
+      readFileSync(join(temporary, 'site/src/data/paper-authors.json')),
+    )
+    const citedDocuments = new Set(
+      [...answers, graph].flatMap((answer) =>
+        Object.values(answer.evidence).map((claim) => claim.document_id),
+      ),
+    )
+    assert.deepEqual(Object.keys(authorIndex).sort(), [...citedDocuments].sort())
+    for (const author of Object.values(authorIndex)) {
+      assert.ok(author.first)
+      assert.ok(author.count >= 1)
+    }
     assert.ok(!existsSync(join(temporary, 'node_modules')))
     const html = readFileSync(join(temporary, 'site/index.html'), 'utf8')
     assert.ok(html.includes('<noscript>'))

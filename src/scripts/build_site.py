@@ -34,6 +34,55 @@ def read(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def paper_authors(path: Path):
+    """Read author metadata from the pack's trailing source_documents section.
+
+    This reads the pack's block-style scalar/list serialization, not general YAML.
+    Reading backwards avoids loading the large claim graph for a small index.
+    """
+    marker = b"\nsource_documents:\n"
+    with path.open("rb") as source:
+        source.seek(0, 2)
+        position, tail = source.tell(), b""
+        while position and marker not in tail:
+            size = min(position, 65536)
+            position -= size
+            source.seek(position)
+            tail = source.read(size) + tail
+    if marker not in tail:
+        raise ValueError("Missing source_documents in the supplied graph")
+
+    def scalar(value):
+        value = value.strip()
+        if value.startswith('"'):
+            return json.loads(value)
+        if value.startswith("'"):
+            if not value.endswith("'"):
+                raise ValueError("Unsupported multiline quoted paper metadata")
+            return value[1:-1].replace("''", "'")
+        if value in {"null", "~", ""}:
+            return ""
+        return value
+
+    records, current, in_authors = {}, None, False
+    for line in tail.split(marker, 1)[1].decode("utf-8").splitlines():
+        if line.startswith("- document_id: "):
+            current = scalar(line[len("- document_id: ") :])
+            records[current] = []
+            in_authors = False
+        elif line == "  authors:":
+            if current is None:
+                raise ValueError("Authors without a source document")
+            in_authors = True
+        elif in_authors and line.startswith("  - "):
+            records[current].append(scalar(line[4:]))
+        elif in_authors and line.startswith("    ") and records[current]:
+            records[current][-1] += " " + line.strip()
+        elif line.strip():
+            in_authors = False
+    return records
+
+
 def validate(answer, summary):
     findings = answer["findings"] + answer.get("with_time", [])
     valid = {
@@ -190,6 +239,21 @@ def build(output: Path):
         ):
             raise ValueError(f"Summary source changed: {question['id']}")
         bundles[question["id"]] = answer, summary
+    documents = {
+        claim["document_id"]
+        for answer, _ in bundles.values()
+        for claim in answer["evidence"].values()
+    }
+    documents.update(
+        claim["document_id"]
+        for claim in read(PROJECT / "answers/q1_tree_planting_graph.json")["evidence"].values()
+    )
+    authors = paper_authors(PROJECT / "graph/causal_graph.yaml")
+    author_index = {
+        document: {"first": authors[document][0], "count": len(authors[document])}
+        for document in sorted(documents)
+        if authors.get(document)
+    }
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=".understory-", dir=output.parent) as temporary:
         stage = Path(temporary) / "site"
@@ -200,6 +264,10 @@ def build(output: Path):
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, target)
         shutil.copytree(SOURCE / "vendor", stage / "vendor")
+        (stage / "src/data/paper-authors.json").write_text(
+            json.dumps(author_index, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
         (stage / "answers").mkdir()
         for name in [*FILES.values(), "q1_tree_planting_graph"]:
             (stage / f"answers/{name}.json").write_text(
