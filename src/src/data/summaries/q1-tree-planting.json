@@ -5,20 +5,13 @@
   "sentences": [
     {
       "text": "Seedling size and stock type treatments increased growth with high certainty; the single survival study also found an increase, with low certainty.",
-      "finding_ids": [
-        "q1:seedling_size:growth",
-        "q1:seedling_size:survival"
-      ],
+      "finding_ids": ["q1:seedling_size:growth", "q1:seedling_size:survival"],
       "gap_ids": []
     },
     {
       "text": "Nursery fertilization had mixed effects on growth, with low certainty, and no included study measured its effect on survival.",
-      "finding_ids": [
-        "q1:nursery_fertilization:growth"
-      ],
-      "gap_ids": [
-        "q1:nursery_fertilization:survival"
-      ]
+      "finding_ids": ["q1:nursery_fertilization:growth"],
+      "gap_ids": ["q1:nursery_fertilization:survival"]
     },
     {
       "text": "Fertilization at planting, a separate practice, increased growth with high certainty, but its effect on survival was mixed, with moderate certainty.",
@@ -30,34 +23,22 @@
     },
     {
       "text": "Mycorrhizal or soil inoculation had mixed effects on both survival and growth, with moderate certainty.",
-      "finding_ids": [
-        "q1:inoculation:survival",
-        "q1:inoculation:growth"
-      ],
+      "finding_ids": ["q1:inoculation:survival", "q1:inoculation:growth"],
       "gap_ids": []
     },
     {
       "text": "More competing vegetation decreased survival with high certainty; its effect on growth was mixed, with low certainty.",
-      "finding_ids": [
-        "q1:competing_vegetation:survival",
-        "q1:competing_vegetation:growth"
-      ],
+      "finding_ids": ["q1:competing_vegetation:survival", "q1:competing_vegetation:growth"],
       "gap_ids": []
     },
     {
       "text": "Vegetation control increased growth with high certainty, but its effect on survival was mixed, with low certainty.",
-      "finding_ids": [
-        "q1:vegetation_control:growth",
-        "q1:vegetation_control:survival"
-      ],
+      "finding_ids": ["q1:vegetation_control:growth", "q1:vegetation_control:survival"],
       "gap_ids": []
     },
     {
       "text": "Site preparation is well studied, with high certainty, yet its effects on survival and growth were mixed.",
-      "finding_ids": [
-        "q1:site_preparation:survival",
-        "q1:site_preparation:growth"
-      ],
+      "finding_ids": ["q1:site_preparation:survival", "q1:site_preparation:growth"],
       "gap_ids": []
     },
     {

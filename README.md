@@ -1,5 +1,26 @@
 # Lane 3 — Decision Support
 
+## Run this submission
+
+Build the HTML/CSS/JavaScript website from a clean checkout with Python 3.10 or newer:
+
+```sh
+./build.sh site/
+```
+
+Preview the output:
+
+```sh
+python3 -m http.server 8000 --directory site
+```
+
+Open `http://localhost:8000`. The build uses only Python's standard library,
+requires no package installation, and makes no network calls.
+
+For local development, `python3 src/scripts/dev.py` serves the site on port
+5173 and rebuilds when you refresh after changing a source file. See
+[`src/README.md`](src/README.md) for the source layout and verification command.
+
 ## The challenge
 
 > **Build the website that serves up the answers to three practitioner**

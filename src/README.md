@@ -1,75 +1,58 @@
-# React + TypeScript + Vite
+# Understory — HTML edition
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The site uses HTML, CSS, JavaScript modules and SVG. There is no React,
+React Flow, Vite, npm dependency installation or network access during the build.
 
-Currently, two official plugins are available:
+From the repository root:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+./build.sh site/
+python3 -m http.server 8000 --directory site
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Open `http://localhost:8000`. Python 3.10+ is the only build requirement.
+The output can be hosted at a domain root or under a subdirectory. Serve it
+over HTTP; browser modules and data requests do not support opening `index.html`
+directly with `file://`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+For development:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```sh
+python3 src/scripts/dev.py
 ```
+
+Open `http://127.0.0.1:5173`; refresh after edits to rebuild. Optional npm
+shortcuts remain in this folder: `npm run dev`, `npm run build`, and
+`npm run preview`. They run the same Python scripts and need no `npm install`.
+
+## Source files
+
+- `index.html`: the launch page and shared native dialogs.
+- `src/app.js`: question matching, navigation, history and modal dialogs.
+- `src/answer-view.js`: sentence selection, highlighting, tabs and evidence drawer.
+- `src/render.js`: data-driven HTML for Q1, Q2, Q3 and source excerpts.
+- `src/graph.js`: interactive SVG connections, HTML nodes and evidence badges.
+- `src/graph-layout.js`: preserved Dagre layout and curve calculations.
+- `src/styles.css`: the existing responsive design and animations.
+- `src/terrain.js`: the original WebGL terrain animation, without React.
+- `src/assets/field-work.html`: the original animated SVG illustration.
+- `src/data/`: shared labels, explanations, question list and reviewed summaries.
+- `vendor/`: Dagre 3.1.3 and license notices, including Phosphor's SVG artwork license.
+- `scripts/build_site.py`: offline packager, data validation and no-JavaScript answers.
+
+The answer JSON files in `../answers/` remain the source for findings,
+directions, certainty, study counts and quotations. The graph preserves all
+12 nodes, 29 evidence edges and its separate gap. The moderation connection
+targets another relationship, as specified in the supplied graph data.
+
+## Verification
+
+With Node.js available for development:
+
+```sh
+node --test src/tests/*.test.js
+```
+
+Run that command from the repository root, or use `npm test` inside this
+folder. Tests use Node's built-in test runner; they require no packages.
+Node is not needed by the judges' build or by the published site.
