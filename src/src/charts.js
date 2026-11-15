@@ -1,5 +1,5 @@
 import { labelWithTerms } from './terms.js'
-import { certainty, escapeHTML as e, linkedAttribute, opener } from './ui.js'
+import { certainty, directionIcon, escapeHTML as e, linkedAttribute, opener } from './ui.js'
 import { directionLabel, studyCount, uniqueLabels } from './data/answer-data.js'
 
 const order = [
@@ -102,7 +102,7 @@ function renderGroup(group, showSubject) {
         return `<div class="chart-row" data-chart-finding="${e(finding.id)}" data-chart-studies="${finding.studies}" ${linkedAttribute(finding.id)}>
         <div class="chart-row-name">${showSubject ? `<span>${labelWithTerms(finding.subject.label)}</span>` : ''}<span>${labelWithTerms(finding.outcome.label)}</span></div>
         <div class="chart-row-bar"><button type="button" class="study-bar" ${opener(finding.id)} aria-label="${e(`${finding.subject.label}, ${finding.outcome.label}: ${studyCount(finding.studies)}. ${group.coverage ? 'Study coverage' : breakdown}. Open supporting evidence.`)}"><span class="study-bar-fill" style="width:${(finding.studies / group.max) * 100}%">${segments}</span></button>${group.coverage ? '' : `<span class="chart-breakdown">${e(breakdown)}</span>`}</div>
-        <span class="chart-total" aria-label="${studyCount(finding.studies)}">${finding.studies}</span><div class="chart-grade">${group.coverage ? `<span class="chart-effect">${e(directionLabel(finding.direction))}</span>` : ''}${certainty(finding)}</div>
+        <span class="chart-total" aria-label="${studyCount(finding.studies)}">${finding.studies}</span><div class="chart-grade">${group.coverage ? `<span class="chart-effect">${directionIcon(finding.direction, 14)}${e(directionLabel(finding.direction))}</span>` : ''}${certainty(finding)}</div>
       </div>`
       })
       .join('')}</div></section>`
