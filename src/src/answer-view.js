@@ -41,6 +41,20 @@ export class AnswerView {
     const options = { signal: this.events.signal }
     this.article.addEventListener('click', (event) => this.click(event), options)
     this.article.addEventListener(
+      'change',
+      (event) => {
+        const controls = event.target.closest('[data-chart-controls]')
+        if (!controls || !this.chartModule) return
+        const filters = Object.fromEntries(
+          [...controls.querySelectorAll('select')].map((select) => [select.name, select.value]),
+        )
+        this.details.querySelector('[data-chart-results]').innerHTML =
+          this.chartModule.renderChartResults(answer, filters)
+        this.updateHighlights()
+      },
+      options,
+    )
+    this.article.addEventListener(
       'keydown',
       (event) => {
         const sentence = event.target.closest('[data-sentence]')
@@ -131,6 +145,15 @@ export class AnswerView {
       (element) => element.getClientRects().length,
     )
     if (!targets.length) return
+    for (const chart of new Set(
+      targets.map((target) => target.closest('.chart-rows')).filter(Boolean),
+    )) {
+      const target = targets.find((target) => target.closest('.chart-rows') === chart)
+      chart.scrollTop +=
+        target.getBoundingClientRect().top -
+        chart.getBoundingClientRect().top -
+        Math.max(0, (chart.clientHeight - target.clientHeight) / 2)
+    }
     const rects = targets.map((element) => element.getBoundingClientRect())
     const top = Math.min(...rects.map((rect) => rect.top)),
       bottom = Math.max(...rects.map((rect) => rect.bottom))
@@ -214,10 +237,30 @@ export class AnswerView {
       )
   }
 
-  switchView(view) {
+  async switchView(view) {
+    const request = (this.viewRequest = (this.viewRequest ?? 0) + 1)
     const graphHost = this.details.querySelector('[data-graph]'),
-      table = this.details.querySelector('[data-table]')
-    if (!graphHost || !table) return
+      table = this.details.querySelector('[data-table]'),
+      chartHost = this.details.querySelector('[data-chart]')
+    if (!table) return
+    if (view === 'chart' && chartHost && !chartHost.dataset.ready) {
+      const button = this.details.querySelector('.view-switch [data-view="chart"]')
+      button.setAttribute('aria-busy', 'true')
+      try {
+        this.chartModule ??= await import('./charts.js')
+        if (this.events.signal.aborted) return
+        chartHost.innerHTML = this.chartModule.renderStudyCharts(this.bundle.answer)
+        chartHost.dataset.ready = 'true'
+      } catch (error) {
+        if (this.events.signal.aborted) return
+        console.error(error)
+        chartHost.innerHTML =
+          '<div class="graph-error" role="alert"><p>The chart could not be displayed. The other views are still available.</p><button type="button" data-view="chart">Try again</button></div>'
+      } finally {
+        button.removeAttribute('aria-busy')
+      }
+      if (request !== this.viewRequest) return
+    }
     if (view === 'graph' && !graphHost.childElementCount) {
       if (!this.graphModule) {
         graphHost.innerHTML =
@@ -232,12 +275,29 @@ export class AnswerView {
         }
       }
     }
-    table.hidden = view === 'graph'
-    graphHost.hidden = view !== 'graph'
-    this.details.querySelector('[data-findings-hint]').textContent =
-      view === 'graph'
-        ? 'Trace direct effects and how practices change growing conditions.'
-        : 'Compare effects on survival and growth, and the evidence behind them.'
+    table.hidden = view !== 'table'
+    if (graphHost) graphHost.hidden = view !== 'graph'
+    if (chartHost) chartHost.hidden = view !== 'chart'
+    const hint = this.details.querySelector('[data-findings-hint]')
+    if (hint)
+      hint.textContent =
+        view === 'chart'
+          ? this.bundle.answer.summary
+            ? 'Compare research coverage across intervention–outcome pairings.'
+            : 'See how many studies report each result, with certainty shown separately.'
+          : view === 'graph'
+            ? 'Trace direct effects and how practices change growing conditions.'
+            : this.bundle.answer.summary
+              ? 'See where evidence is concentrated and where this map has gaps.'
+              : this.bundle.answer.with_time
+                ? 'See which attributes differ from natural wetlands at the ages studied.'
+                : 'Compare effects on survival and growth, and the evidence behind them.'
+    const title = this.details.querySelector('#map-title')
+    if (title) title.textContent = view === 'chart' ? 'Study coverage' : 'Evidence map'
+    const referenceTitle = this.details.querySelector('.marsh > h2')
+    if (referenceTitle)
+      referenceTitle.textContent =
+        view === 'chart' ? 'Marsh findings' : this.bundle.answer.findings[0].subject.label
     this.hoveredNode = this.pointedEdge = null
     for (const button of this.details.querySelectorAll('[data-view]'))
       button.setAttribute('aria-pressed', String(button.dataset.view === view))

@@ -32,6 +32,7 @@ shortcuts remain in this folder: `npm run dev`, `npm run build`, and
 - `src/answer-view.js`: sentence selection, highlighting, tabs and evidence drawer.
 - `src/render.js`: data-driven HTML for Q1, Q2, Q3 and source excerpts.
 - `src/graph.js`: interactive SVG connections, HTML nodes and evidence badges.
+- `src/charts.js`: optional, interactive study-count charts for all three questions.
 - `src/graph-layout.js`: preserved Dagre layout and curve calculations.
 - `src/styles.css`: the existing responsive design and animations.
 - `src/terrain.js`: the original WebGL terrain animation, without React.
@@ -56,6 +57,14 @@ node --test src/tests/*.test.js
 Run that command from the repository root, or use `npm test` inside this
 folder. Tests use Node's built-in test runner; they require no packages.
 Node is not needed by the judges' build or by the published site.
+
+The Chart view is loaded only when selected and uses no extra library. Q1 and
+Q2 bars read `study_directions` and `studies` directly from the answer files;
+Q2 reference comparisons and age-related findings stay separate. Q3 bars use
+`studies`, with the default top ten taken from `summary.densest`. Filters select
+existing findings without recomputing their grades or predicting outcomes.
+Bar lengths represent study counts, not effect sizes, and papers may appear
+in more than one finding. Every bar links to that finding's original evidence.
 
 The build extracts the first author and author count for cited papers directly
 from `graph/causal_graph.yaml` into a compact `paper-authors.json` file. Sources

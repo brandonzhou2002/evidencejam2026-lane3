@@ -26,6 +26,10 @@ import {
   sentenceIds,
 } from './ui.js'
 
+function viewSwitch(primary, graph = false) {
+  return `<div class="view-switch" role="group" aria-label="Show findings as"><button type="button" data-view="table" aria-pressed="true">${primary}</button>${graph ? '<button type="button" data-view="graph" aria-pressed="false">Graph</button>' : ''}<button type="button" data-view="chart" aria-pressed="false">Chart</button></div>`
+}
+
 export function renderTakeaways(sentences, pinned = null) {
   const split = sentences.length > 3 ? Math.ceil(sentences.length / 2) : sentences.length
   const rendered = sentences.map((sentence, index) => {
@@ -102,9 +106,9 @@ export function renderReference(answer) {
     ...answer.findings.filter((f) => f.lags),
     ...answer.findings.filter((f) => !f.lags),
   ]
-  return `<section class="glance marsh" aria-label="Findings"><h2>${e(answer.findings[0]?.subject.label ?? 'Compared with reference')}</h2><p class="section-hint">See which attributes differ from natural wetlands at the ages studied.</p><ul class="finding-list">${findings.map(renderFindingRow).join('')}</ul>
+  return `<section class="glance marsh" aria-label="Findings">${viewSwitch('Table')}<h2>${e(answer.findings[0]?.subject.label ?? 'Compared with reference')}</h2><p class="section-hint" data-findings-hint>See which attributes differ from natural wetlands at the ages studied.</p><div data-table><ul class="finding-list">${findings.map(renderFindingRow).join('')}</ul>
     ${answer.gaps.length ? `<div class="gap-chips"><span title="${e(noEvidenceNote)}">No evidence found</span><ul>${answer.gaps.map((gap) => `<li ${linked(gap.id)}><button type="button" ${opener(gap.id)}>${e(gap.outcome.label)}</button></li>`).join('')}</ul></div><p class="section-hint gap-hint">No matching reference comparisons were found for these attributes.</p>` : ''}
-    ${answer.with_time?.length ? `<h2>${e(answer.with_time[0].subject.label)}</h2><p class="section-hint">Changes observed as marshes age, without an established recovery timeline.</p><p class="trend-note">No clear evidence of change means the studies did not detect a clear change—not that no change occurred.</p><ul class="finding-list">${answer.with_time.map(renderFindingRow).join('')}</ul>` : ''}</section>`
+    ${answer.with_time?.length ? `<h2>${e(answer.with_time[0].subject.label)}</h2><p class="section-hint">Changes observed as marshes age, without an established recovery timeline.</p><p class="trend-note">No clear evidence of change means the studies did not detect a clear change—not that no change occurred.</p><ul class="finding-list">${answer.with_time.map(renderFindingRow).join('')}</ul>` : ''}</div><div data-chart hidden></div></section>`
 }
 
 export function renderCoverage(answer) {
@@ -122,7 +126,7 @@ export function renderCoverage(answer) {
   const densest = new Set(answer.summary.densest),
     max = Math.max(...findings.map((f) => f.studies)),
     summary = answer.summary
-  return `<section class="glance gap-map-section" aria-labelledby="map-title"><h2 id="map-title">Evidence map</h2><p class="section-hint">See where evidence is concentrated and where this map has gaps.</p><div class="coverage">
+  return `<section class="glance gap-map-section" aria-labelledby="map-title">${viewSwitch('Map')}<h2 id="map-title">Evidence map</h2><p class="section-hint" data-findings-hint>See where evidence is concentrated and where this map has gaps.</p><div data-table><div class="coverage">
     <p><strong>${summary.filled}</strong> of ${summary.cells} combinations studied · <strong>${summary.thin}</strong> by a single study · <strong>${summary.empty}</strong> with no mapped evidence</p>
     <span class="map-legend" aria-hidden="true"><i class="d-thin"></i>1 study<i class="d-some"></i>2–3<i class="d-dense"></i>4+<i class="d-gap"></i><span title="${e(mappedGapNote)}">No mapped evidence</span><i class="d-densest"></i>${densest.size} most studied</span></div>
     <div class="gap-map-scroll"><table class="gap-map"><thead><tr><td></td>${columns.map((c) => `<th scope="col"><span title="${e(c.label)}">${e(c.label)}</span></th>`).join('')}</tr></thead><tbody>${rows
@@ -137,7 +141,7 @@ export function renderCoverage(answer) {
             })
             .join('')}</tr>`,
       )
-      .join('')}</tbody></table></div></section>`
+      .join('')}</tbody></table></div></div><div data-chart hidden></div></section>`
 }
 
 export function renderDetails(answer, graph) {
@@ -146,7 +150,7 @@ export function renderDetails(answer, graph) {
     ? renderCoverage(answer)
     : answer.short_answer || answer.with_time
       ? renderReference(answer)
-      : `<section class="glance" aria-labelledby="glance-title"><div class="section-heading"><h2 id="glance-title">Findings by practice and outcome</h2><p class="section-hint" data-findings-hint>Compare effects on survival and growth, and the evidence behind them.</p></div>${graph ? '<div class="view-switch" role="group" aria-label="Show findings as"><button type="button" data-view="table" aria-pressed="true">Table</button><button type="button" data-view="graph" aria-pressed="false">Graph</button></div>' : ''}<div data-table>${renderMatrix(answer, graph)}</div>${graph ? '<div data-graph hidden></div>' : ''}${renderCombined(answer)}</section>`
+      : `<section class="glance" aria-labelledby="glance-title">${viewSwitch('Table', !!graph)}<div class="section-heading"><h2 id="glance-title">Findings by practice and outcome</h2><p class="section-hint" data-findings-hint>Compare effects on survival and growth, and the evidence behind them.</p></div><div data-table>${renderMatrix(answer, graph)}</div>${graph ? '<div data-graph hidden></div>' : ''}<div data-chart hidden></div>${renderCombined(answer)}</section>`
   return limits + view
 }
 
