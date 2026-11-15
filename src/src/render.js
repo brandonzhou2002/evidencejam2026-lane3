@@ -75,7 +75,7 @@ export function renderMatrix(answer, graph) {
 
 export function renderCombined(answer) {
   if (!answer.interactions?.length) return ''
-  return `<div class="combined"><h3>Combined treatments</h3><ul>${answer.interactions
+  return `<div class="combined"><h3>Combined treatments</h3><p class="section-hint">What happens when treatments are used together or one changes another’s effect.</p><ul>${answer.interactions
     .filter((item) => answer.evidence[item.edge_id])
     .map(
       (item) =>
@@ -102,9 +102,9 @@ export function renderReference(answer) {
     ...answer.findings.filter((f) => f.lags),
     ...answer.findings.filter((f) => !f.lags),
   ]
-  return `<section class="glance marsh" aria-label="Findings"><h2>${e(answer.findings[0]?.subject.label ?? 'Compared with reference')}</h2><ul class="finding-list">${findings.map(renderFindingRow).join('')}</ul>
-    ${answer.gaps.length ? `<div class="gap-chips"><span title="${e(noEvidenceNote)}">No evidence found</span><ul>${answer.gaps.map((gap) => `<li ${linked(gap.id)}><button type="button" ${opener(gap.id)}>${e(gap.outcome.label)}</button></li>`).join('')}</ul></div>` : ''}
-    ${answer.with_time?.length ? `<h2>${e(answer.with_time[0].subject.label)}</h2><p class="trend-note">No clear evidence of change means the studies did not detect a clear change—not that no change occurred.</p><ul class="finding-list">${answer.with_time.map(renderFindingRow).join('')}</ul>` : ''}</section>`
+  return `<section class="glance marsh" aria-label="Findings"><h2>${e(answer.findings[0]?.subject.label ?? 'Compared with reference')}</h2><p class="section-hint">See which attributes differ from natural wetlands at the ages studied.</p><ul class="finding-list">${findings.map(renderFindingRow).join('')}</ul>
+    ${answer.gaps.length ? `<div class="gap-chips"><span title="${e(noEvidenceNote)}">No evidence found</span><ul>${answer.gaps.map((gap) => `<li ${linked(gap.id)}><button type="button" ${opener(gap.id)}>${e(gap.outcome.label)}</button></li>`).join('')}</ul></div><p class="section-hint gap-hint">No matching reference comparisons were found for these attributes.</p>` : ''}
+    ${answer.with_time?.length ? `<h2>${e(answer.with_time[0].subject.label)}</h2><p class="section-hint">Changes observed as marshes age, without an established recovery timeline.</p><p class="trend-note">No clear evidence of change means the studies did not detect a clear change—not that no change occurred.</p><ul class="finding-list">${answer.with_time.map(renderFindingRow).join('')}</ul>` : ''}</section>`
 }
 
 export function renderCoverage(answer) {
@@ -122,7 +122,7 @@ export function renderCoverage(answer) {
   const densest = new Set(answer.summary.densest),
     max = Math.max(...findings.map((f) => f.studies)),
     summary = answer.summary
-  return `<section class="glance gap-map-section" aria-labelledby="map-title"><div class="coverage"><h2 id="map-title" class="sr-only">Evidence map: interventions by outcomes</h2>
+  return `<section class="glance gap-map-section" aria-labelledby="map-title"><h2 id="map-title">Evidence map</h2><p class="section-hint">See where evidence is concentrated and where this map has gaps.</p><div class="coverage">
     <p><strong>${summary.filled}</strong> of ${summary.cells} combinations studied · <strong>${summary.thin}</strong> by a single study · <strong>${summary.empty}</strong> with no mapped evidence</p>
     <span class="map-legend" aria-hidden="true"><i class="d-thin"></i>1 study<i class="d-some"></i>2–3<i class="d-dense"></i>4+<i class="d-gap"></i><span title="${e(mappedGapNote)}">No mapped evidence</span><i class="d-densest"></i>${densest.size} most studied</span></div>
     <div class="gap-map-scroll"><table class="gap-map"><thead><tr><td></td>${columns.map((c) => `<th scope="col"><span title="${e(c.label)}">${e(c.label)}</span></th>`).join('')}</tr></thead><tbody>${rows
@@ -141,19 +141,19 @@ export function renderCoverage(answer) {
 }
 
 export function renderDetails(answer, graph) {
-  const limits = `<section class="limitations" aria-labelledby="limitations-title"><h2 id="limitations-title">What this answer can’t tell you</h2><ul>${answer.limitations.map((limit) => `<li>${e(limitationText(limit, answer.summary))}</li>`).join('')}</ul></section>`
+  const limits = `<section class="limitations" aria-labelledby="limitations-title"><h2 id="limitations-title">What this answer can’t tell you</h2><p class="section-hint">Limits to consider before applying these findings.</p><ul>${answer.limitations.map((limit) => `<li>${e(limitationText(limit, answer.summary))}</li>`).join('')}</ul></section>`
   const view = answer.summary?.cells
     ? renderCoverage(answer)
     : answer.short_answer || answer.with_time
       ? renderReference(answer)
-      : `<section class="glance" aria-labelledby="glance-title"><h2 id="glance-title" class="sr-only">Findings by practice and outcome</h2>${graph ? '<div class="view-switch" role="group" aria-label="Show findings as"><button type="button" data-view="table" aria-pressed="true">Table</button><button type="button" data-view="graph" aria-pressed="false">Graph</button></div>' : ''}<div data-table>${renderMatrix(answer, graph)}</div>${graph ? '<div data-graph hidden></div>' : ''}${renderCombined(answer)}</section>`
+      : `<section class="glance" aria-labelledby="glance-title"><div class="section-heading"><h2 id="glance-title">Findings by practice and outcome</h2><p class="section-hint" data-findings-hint>Compare effects on survival and growth, and the evidence behind them.</p></div>${graph ? '<div class="view-switch" role="group" aria-label="Show findings as"><button type="button" data-view="table" aria-pressed="true">Table</button><button type="button" data-view="graph" aria-pressed="false">Graph</button></div>' : ''}<div data-table>${renderMatrix(answer, graph)}</div>${graph ? '<div data-graph hidden></div>' : ''}${renderCombined(answer)}</section>`
   return limits + view
 }
 
 export function renderSources(edgeIds, evidence, titled = false, authors = {}) {
   const papers = papersFor(edgeIds, evidence),
     quotes = papers.reduce((sum, paper) => sum + paper.claims.length, 0)
-  return `<section class="drawer-section"><h3>Sources</h3>${titled ? '' : `<p class="sources-count">${quotes} ${quotes === 1 ? 'quote' : 'quotes'} from ${papers.length} ${papers.length === 1 ? 'paper' : 'papers'}</p>`}
+  return `<section class="drawer-section"><h3>Sources</h3><p class="section-hint">Read the source sentences and open the original papers.</p>${titled ? '' : `<p class="sources-count">${quotes} ${quotes === 1 ? 'quote' : 'quotes'} from ${papers.length} ${papers.length === 1 ? 'paper' : 'papers'}</p>`}
     <ol class="papers">${papers
       .map(
         (
@@ -173,11 +173,11 @@ export function renderDrawer(opened, evidence, authors = {}) {
   if (opened.kind === 'claim')
     content = `<div class="drawer-summary">${direction(opened.direction)}</div>${renderSources([opened.id], evidence, true, authors)}`
   else if (opened.kind === 'gap')
-    content = `<div class="drawer-summary"><span class="drawer-gap">No evidence found</span><p>${e(noEvidenceNote)}</p></div><section class="drawer-section"><h3>What was searched for</h3><p>${e(opened.item.searched_for)}</p></section>`
+    content = `<div class="drawer-summary"><span class="drawer-gap">No evidence found</span><p>${e(noEvidenceNote)}</p></div><section class="drawer-section"><h3>What was searched for</h3><p class="section-hint">The evidence checked for this practice and outcome.</p><p>${e(opened.item.searched_for)}</p></section>`
   else {
     const finding = opened.item
     content = `<div class="drawer-summary">${direction(finding.direction)}<span class="result-meta">${certainty(finding)}<span>${studyCount(finding.studies)}</span></span>${hasBreakdown(finding) ? `<span class="result-breakdown">${e(studyBreakdown(finding))}</span>` : ''}</div>
-      <section class="drawer-section"><h3>Why ${e(certaintyLabel(finding.certainty).toLowerCase())} certainty</h3><ul class="drawer-reasons">${certaintyReasons(
+      <section class="drawer-section"><h3>Why ${e(certaintyLabel(finding.certainty).toLowerCase())} certainty</h3><p class="section-hint">What strengthens or weakens the evidence behind this finding.</p><ul class="drawer-reasons">${certaintyReasons(
         finding.certainty_rationale,
       )
         .map((reason) => `<li>${e(reason)}</li>`)

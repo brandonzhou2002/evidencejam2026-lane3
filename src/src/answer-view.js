@@ -31,7 +31,7 @@ export class AnswerView {
     if (graph && graphModule)
       for (const item of [...graph.edges, ...graph.gaps])
         this.records.set(item.id, graphModule.graphFinding(item, graph))
-    container.innerHTML = `<article class="answer-view"><h1 tabindex="-1" class="answer-question">${e(question.question)}</h1>${renderHeadline(answer)}<div class="takeaways"></div><div class="answer-details"></div><aside class="selection-note" role="region" aria-label="Selected summary sentence" hidden><p aria-live="polite"></p><button type="button" data-clear-selection aria-label="Clear selection and return to summary" title="Return to summary">${icon('X', 18)}</button></aside><aside id="evidence-drawer" class="evidence-drawer" role="dialog" aria-label="Evidence" aria-hidden="true" inert></aside></article>`
+    container.innerHTML = `<article class="answer-view"><h1 tabindex="-1" class="answer-question">${e(question.question)}</h1>${renderHeadline(answer)}<div class="summary-section"><p class="section-hint">What the studies tell us overall.</p><div class="takeaways"></div></div><div class="answer-details"></div><aside class="selection-note" role="region" aria-label="Selected summary sentence" hidden><p aria-live="polite"></p><button type="button" data-clear-selection aria-label="Clear selection and return to summary" title="Return to summary">${icon('X', 18)}</button></aside><aside id="evidence-drawer" class="evidence-drawer" role="dialog" aria-label="Evidence" aria-hidden="true" inert></aside></article>`
     this.article = container.querySelector('article')
     this.takeaways = this.article.querySelector('.takeaways')
     this.details = this.article.querySelector('.answer-details')
@@ -234,6 +234,10 @@ export class AnswerView {
     }
     table.hidden = view === 'graph'
     graphHost.hidden = view !== 'graph'
+    this.details.querySelector('[data-findings-hint]').textContent =
+      view === 'graph'
+        ? 'Trace direct effects and how practices change growing conditions.'
+        : 'Compare effects on survival and growth, and the evidence behind them.'
     this.hoveredNode = this.pointedEdge = null
     for (const button of this.details.querySelectorAll('[data-view]'))
       button.setAttribute('aria-pressed', String(button.dataset.view === view))

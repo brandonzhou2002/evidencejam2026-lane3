@@ -658,6 +658,44 @@ h1.answer-question:focus {
 .glance {
   margin-top: 40px;
 }
+.glance > h2,
+.section-heading > h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: #e7efea;
+}
+.section-hint,
+.drawer-section > .section-hint {
+  margin: 0 0 14px;
+  max-width: 900px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #93a69b;
+}
+.section-heading {
+  margin-bottom: 16px;
+}
+.section-heading > .section-hint {
+  margin: 0;
+}
+.summary-section {
+  margin-top: 22px;
+}
+.summary-section .section-hint {
+  margin-bottom: 8px;
+}
+.summary-section .takeaways {
+  margin-top: 0;
+}
+.limitations .section-hint {
+  margin: 6px 0 0;
+}
+.gap-hint {
+  margin: 8px 0 0;
+}
 .graph-error {
   padding: 20px;
   border: 1px solid #435c4d;
@@ -903,9 +941,9 @@ h1.answer-question:focus {
 }
 .combined h3,
 .marsh h2 {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 12px;
+  margin: 0 0 6px;
   color: #e7efea;
 }
 .combined ul {
