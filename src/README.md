@@ -68,7 +68,8 @@ answer JSON. Failed graph and excerpt requests can be retried independently.
 The Chart view is loaded only when selected and uses no extra library. Q1 and
 Q2 bars read `study_directions` and `studies` directly from the answer files;
 Q2 reference comparisons and age-related findings stay separate. Q3 bars use
-`studies`, with the default top ten taken from `summary.densest`. Filters select
+`studies` and show all mapped findings by default. The optional top ten comes
+from `summary.densest`. Filters select
 existing findings without recomputing their grades or predicting outcomes.
 Bar lengths represent study counts, not effect sizes, and papers may appear
 in more than one finding. Every bar links to that finding's original evidence.

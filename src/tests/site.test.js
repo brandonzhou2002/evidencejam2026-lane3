@@ -333,8 +333,12 @@ test('a fresh source-only checkout builds without node_modules or downloads', ()
     assert.ok(!existsSync(join(temporary, 'node_modules')))
     const html = readFileSync(join(temporary, 'site/index.html'), 'utf8')
     assert.ok(html.includes('<noscript>'))
-    assert.ok(html.includes('src="./src/app.js"'))
-    assert.ok(html.includes('href="./src/styles.css"'))
+    assert.match(html, /src="\.\/src\/app\.js\?v=[a-f0-9]{12}"/)
+    assert.match(html, /href="\.\/src\/styles\.css\?v=[a-f0-9]{12}"/)
+    assert.match(
+      readFileSync(join(temporary, 'site/src/answer-view.js'), 'utf8'),
+      /import\('\.\/charts\.js\?v=[a-f0-9]{12}'\)/,
+    )
     assert.ok(!/react|vite|cdn\./i.test(html))
     for (const name of [...names, 'q1_tree_planting_graph'])
       assert.deepEqual(

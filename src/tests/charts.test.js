@@ -51,10 +51,13 @@ test('Q2 charts keep reference comparisons separate from marsh-age findings', ()
   assert.ok(html.includes('No clear evidence of change'))
 })
 
-test('Q3 defaults to the answer file’s top ten and bar values equal study counts', () => {
+test('Q3 defaults to all findings and retains the supplied top-ten option', () => {
+  assert.match(renderStudyCharts(q3), /<option value="all" selected>All mapped findings/)
   const [group] = chartGroups(q3)
+  assert.equal(group.findings.length, q3.findings.length)
+  const top = chartGroups(q3, { limit: 'top' })[0]
   assert.deepEqual(
-    group.findings.map((f) => f.id),
+    top.findings.map((f) => f.id),
     q3.summary.densest,
   )
   const all = chartGroups(q3, { limit: 'all' })[0]

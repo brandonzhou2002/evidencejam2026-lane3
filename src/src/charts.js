@@ -21,7 +21,7 @@ export function chartGroups(answer, filters = {}) {
     (!filters.outcome || finding.outcome.id === filters.outcome)
   if (answer.summary) {
     let findings = answer.findings.filter(matches)
-    if (!filters.subject && !filters.outcome && filters.limit !== 'all') {
+    if (!filters.subject && !filters.outcome && filters.limit === 'top') {
       const byId = new Map(findings.map((f) => [f.id, f]))
       findings = answer.summary.densest.map((id) => byId.get(id)).filter(Boolean)
     } else {
@@ -29,7 +29,7 @@ export function chartGroups(answer, filters = {}) {
         (a, b) =>
           b.studies - a.studies || b.claims - a.claims || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0),
       )
-      if (filters.limit !== 'all') findings = findings.slice(0, answer.summary.densest.length)
+      if (filters.limit === 'top') findings = findings.slice(0, answer.summary.densest.length)
     }
     return [
       {
@@ -127,7 +127,7 @@ export function renderStudyCharts(answer) {
   const all = [...answer.findings, ...(answer.with_time ?? []), ...answer.gaps]
   const select = (name, label, items) =>
     `<label>${label}<select name="${name}"><option value="">All ${label.toLowerCase()}s</option>${items.map((item) => `<option value="${e(item.id)}">${e(item.label)}</option>`).join('')}</select></label>`
-  return `<div class="study-charts"><div class="chart-controls" data-chart-controls>${answer.with_time ? '' : select('subject', 'Practice', uniqueLabels(all, 'subject'))}${select('outcome', 'Outcome', uniqueLabels(all, 'outcome'))}${answer.summary ? '<label>Show<select name="limit"><option value="top">Top 10 in this selection</option><option value="all">All mapped findings</option></select></label>' : ''}</div>
+  return `<div class="study-charts"><div class="chart-controls" data-chart-controls>${answer.with_time ? '' : select('subject', 'Practice', uniqueLabels(all, 'subject'))}${select('outcome', 'Outcome', uniqueLabels(all, 'outcome'))}${answer.summary ? '<label>Show<select name="limit" autocomplete="off"><option value="all" selected>All mapped findings</option><option value="top">Top 10 in this selection</option></select></label>' : ''}</div>
     <p class="section-hint">Bars show study counts, not effect size. A paper may appear in more than one row. Select a bar to read its evidence.</p>
     <div data-chart-results>${renderChartResults(answer)}</div></div>`
 }

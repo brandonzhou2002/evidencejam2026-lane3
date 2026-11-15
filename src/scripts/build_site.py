@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import html
 import json
+import re
 from pathlib import Path
 import shutil
 import sys
@@ -305,10 +306,35 @@ def build(output: Path):
                 ),
                 encoding="utf-8",
             )
+        digest = hashlib.sha256((SOURCE / "index.html").read_bytes())
+        assets = sorted(
+            p
+            for folder in (stage / "src", stage / "vendor")
+            for p in folder.rglob("*")
+            if p.suffix in {".js", ".css"}
+        )
+        for asset in assets:
+            digest.update(str(asset.relative_to(stage)).encode())
+            digest.update(asset.read_bytes())
+        version = digest.hexdigest()[:12]
+        for asset in assets:
+            if asset.suffix != ".js":
+                continue
+            code = asset.read_text(encoding="utf-8")
+            for pattern in (
+                r"""(\bfrom\s+['"])(\.{1,2}/[^'"]+\.js)(['"])""",
+                r"""(\bimport\(\s*['"])(\.{1,2}/[^'"]+\.js)(['"]\s*\))""",
+            ):
+                code = re.sub(
+                    pattern, lambda match: f"{match[1]}{match[2]}?v={version}{match[3]}", code
+                )
+            asset.write_text(code, encoding="utf-8")
         page = (
             (SOURCE / "index.html")
             .read_text(encoding="utf-8")
             .replace("<!-- STATIC_ANSWERS -->", fallback(questions, bundles))
+            .replace('src="./src/app.js"', f'src="./src/app.js?v={version}"')
+            .replace('href="./src/styles.css"', f'href="./src/styles.css?v={version}"')
         )
         (stage / "index.html").write_text(page, encoding="utf-8")
         (stage / ".understory-build").write_text(

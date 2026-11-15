@@ -1031,7 +1031,7 @@ h1.answer-question:focus {
 }
 .chart-row {
   display: grid;
-  grid-template-columns: minmax(170px, 1fr) minmax(160px, 1.6fr) 30px 170px;
+  grid-template-columns: minmax(170px, 1fr) minmax(160px, 1.6fr) 32px 210px;
   gap: 12px;
   align-items: center;
   padding: 12px;
@@ -1116,12 +1116,22 @@ h1.answer-question:focus {
   text-align: right;
 }
 .chart-grade .certainty {
-  gap: 5px;
+  width: max-content;
+  gap: 6px;
   font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.chart-grade .certainty-dots {
+  flex-shrink: 0;
 }
 .chart-grade {
   display: grid;
-  gap: 4px;
+  justify-items: start;
+  align-content: center;
+  gap: 6px;
+  padding-left: 14px;
+  border-left: 1px solid #2c3d35;
 }
 .chart-effect {
   font-size: 12px;
@@ -1156,12 +1166,14 @@ h1.answer-question:focus {
   opacity: 0.65;
   cursor: progress;
 }
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .chart-row {
     grid-template-columns: minmax(140px, 1fr) minmax(120px, 1.5fr) 24px;
   }
   .chart-grade {
     grid-column: 2 / -1;
+    padding-left: 0;
+    border-left: 0;
   }
 }
 @media (max-width: 600px) {
