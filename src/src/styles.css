@@ -127,8 +127,16 @@ a:focus-visible {
 .site-wordmark span {
   color: var(--mint);
 }
-.about-button {
+.header-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px 24px;
   margin-left: auto;
+}
+.about-button {
+  margin-left: 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -154,21 +162,6 @@ a:focus-visible {
 .about-button:hover {
   color: var(--mint);
   border-color: var(--mint);
-}
-.walkthrough-help {
-  margin-left: auto;
-  padding: 8px 0;
-  border: 0;
-  background: none;
-  color: #a9b9b0;
-  font-size: 13px;
-  white-space: nowrap;
-}
-.walkthrough-help:hover {
-  color: var(--mint);
-}
-.walkthrough-help + .about-button {
-  margin-left: 0;
 }
 .walkthrough {
   position: fixed;
@@ -2892,4 +2885,27 @@ h1.answer-question:focus {
 .finding-row:has(.finding-open[aria-expanded='true']) {
   border-color: #7fb898;
   background: #182620;
+}
+
+.how-steps {
+  margin: 24px 0 0;
+  padding-left: 22px;
+  color: #dfe9e3;
+}
+.how-steps li {
+  padding-left: 6px;
+  margin-bottom: 20px;
+}
+.how-steps strong {
+  font-size: 15px;
+  font-weight: 550;
+}
+.how-steps li p {
+  margin: 6px 0 0;
+  font-size: 14px;
+}
+@media (max-width: 700px) {
+  .header-links {
+    gap: 6px 16px;
+  }
 }

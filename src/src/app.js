@@ -59,7 +59,7 @@ function syncChrome() {
   shell.classList.toggle('has-history', !!showPanel)
   main.classList.toggle('answer-main', !!shown)
   historyPanel.hidden = !showPanel
-  header.innerHTML = `<button type="button" class="site-wordmark" data-action="new-question" aria-label="Understory home">UNDER<span>STORY</span></button>${shown && !loading && history.length && !panelOpen ? `<button type="button" class="panel-toggle" data-action="show-history" aria-label="Show previous questions" aria-expanded="false" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button>` : ''}${shown && !loading ? '<button type="button" class="walkthrough-help" data-action="walkthrough">How to use</button>' : ''}${loading ? '' : `<button type="button" class="about-button" data-action="about">About the evidence ${icon('ArrowUpRight', 15)}</button>`}`
+  header.innerHTML = `<button type="button" class="site-wordmark" data-action="new-question" aria-label="Understory home">UNDER<span>STORY</span></button>${shown && !loading && history.length && !panelOpen ? `<button type="button" class="panel-toggle" data-action="show-history" aria-label="Show previous questions" aria-expanded="false" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button>` : ''}${loading ? '' : `<nav class="header-links" aria-label="About Understory">${!shown ? '<button type="button" class="about-button" data-action="who">Who we are</button>' : ''}<button type="button" class="about-button" data-action="how">How this works</button><button type="button" class="about-button" data-action="about">About the evidence</button></nav>`}`
   if (showPanel)
     historyPanel.innerHTML = `<div class="history-top"><button type="button" class="history-new" data-action="new-question">${icon('Plus', 16)} New question</button><button type="button" class="panel-toggle" data-action="hide-history" aria-label="Hide previous questions" aria-expanded="true" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button></div><nav aria-label="Previous questions"><ul>${history.map((entry) => `<li><button type="button" data-history="${e(entry.key)}"${shown?.key === entry.key ? ' aria-current="page"' : ''} title="${e(questions.find((q) => q.id === entry.id).question)}">${e(entry.label)}</button></li>`).join('')}</ul></nav>`
 }
@@ -68,12 +68,14 @@ function syncPause() {
 }
 function showModal(kind, trigger) {
   modalTrigger = trigger
+  const pages = {
+    about:
+      '<h2 id="dialog-title" tabindex="-1">Grounded in research.</h2><p>See what research can tell us about restoring ecosystems across Canada. The studies bring together different places, approaches, and results, helping us understand what works, where findings differ, and which questions remain unanswered.</p>',
+    who: '<h2 id="dialog-title" tabindex="-1">Who we are</h2><p>We’re Random Team, the team behind Understory for Evidence Jam 2026.</p><p>Understory helps people planning and carrying out ecological restoration make sense of the research behind their decisions. We bring findings together so you can compare approaches, see where results differ, and understand how much confidence to place in them.</p><p>Start with a short answer, then follow it to individual findings, study counts, and source quotes. We show what the studies found separately from how strong the evidence is, so a high certainty grade is never a promise that an approach will work everywhere.</p><p>We also make gaps visible. When no evidence is mapped for a particular pairing, that points to an unanswered question within this map—not proof that an approach has no effect. Our aim is to help you weigh the evidence alongside your site conditions and practical experience.</p>',
+    how: '<h2 id="dialog-title" tabindex="-1">How this works</h2><ol class="how-steps"><li><strong>Ask a supported question.</strong><p>Choose a suggested topic or enter its question. Understory currently matches three prepared questions.</p></li><li><strong>Start with the summary.</strong><p>Select a sentence to jump to the findings behind it. Switch views to compare results, relationships, or study counts.</p></li><li><strong>Check the evidence.</strong><p>Select a finding to read source quotes and open the original papers. Effect direction, certainty, and study counts are shown separately.</p></li></ol>',
+  }
   document.querySelector('#dialog-content').innerHTML =
-    `<button type="button" class="close-button" data-action="close-modal" aria-label="Close dialog">${icon('X', 21)}</button>${
-      kind === 'about'
-        ? `<div class="dialog-icon">${icon('Leaf', 32)}</div><h2 id="dialog-title" tabindex="-1">Grounded in research.</h2><p>See what research can tell us about restoring ecosystems across Canada. The studies bring together different places, approaches, and results, helping us understand what works, where findings differ, and which questions remain unanswered.</p>`
-        : `<h2 id="dialog-title" tabindex="-1">Not available yet.</h2><p>This question isn’t supported yet. Please check back later, or choose one below.</p><div class="dialog-questions">${questions.map((q) => `<button type="button" data-pick="${e(q.id)}"><span>${e(q.title)}</span>${icon('ArrowUpRight', 18)}</button>`).join('')}</div><button type="button" class="edit-button" data-action="edit-question">Edit my question</button>`
-    }`
+    `<button type="button" class="close-button" data-action="close-modal" aria-label="Close dialog">${icon('X', 21)}</button>${pages[kind] ?? `<h2 id="dialog-title" tabindex="-1">Not available yet.</h2><p>This question isn’t supported yet. Please check back later, or choose one below.</p><div class="dialog-questions">${questions.map((q) => `<button type="button" data-pick="${e(q.id)}"><span>${e(q.title)}</span>${icon('ArrowUpRight', 18)}</button>`).join('')}</div><button type="button" class="edit-button" data-action="edit-question">Edit my question</button>`}`
   if (!dialog.open) dialog.showModal()
   document.querySelector('#dialog-title').focus()
   syncPause()
@@ -221,8 +223,11 @@ document.addEventListener('click', async (event) => {
     syncPause()
   }
   if (action === 'close-term') termDialog.close()
-  if (action === 'about') showModal('about', button)
-  if (action === 'walkthrough') showWalkthrough(true, button)
+  if (['about', 'who'].includes(action)) showModal(action, button)
+  if (action === 'how') {
+    if (shown && !loading) showWalkthrough(true, button)
+    else showModal('how', button)
+  }
   if (action === 'close-modal') dialog.close()
   if (action === 'close-certainty') certaintyDialog.close()
   if (action === 'show-history') {

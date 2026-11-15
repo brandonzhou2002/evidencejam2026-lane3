@@ -71,7 +71,7 @@ export function showWalkthrough(force = false, opener = null) {
     },
     {
       title: 'Get a quick explanation',
-      text: 'Select ⓘ beside a certainty rating to understand the grades, or ? beside a technical term for a short definition. You can replay this guide from How to use.',
+      text: 'Select ⓘ beside a certainty rating to understand the grades, or ? beside a technical term for a short definition. You can replay this guide from How this works.',
       target: '.certainty-info, .term-info',
       fallback: '.view-switch',
     },
