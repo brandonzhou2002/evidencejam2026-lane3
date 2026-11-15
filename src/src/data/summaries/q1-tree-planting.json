@@ -1,20 +1,20 @@
 {
   "id": "q1-tree-planting",
   "question": "For tree planting in Canadian forest restoration, how do planting-stock traits (seedling size, nursery fertilization, mycorrhizal inoculation) affect survival and growth, and how do competing vegetation and site preparation change that?",
-  "text": "Seedling size and stock type treatments increased growth with high certainty; the single survival study also found an increase, with low certainty. Nursery fertilization had mixed effects on growth, with low certainty, and no included study measured its effect on survival. Fertilization at planting, a separate practice, increased growth with high certainty, but its effect on survival was mixed, with moderate certainty. Mycorrhizal or soil inoculation had mixed effects on both survival and growth, with moderate certainty. More competing vegetation decreased survival with high certainty; its effect on growth was mixed, with low certainty. Vegetation control increased growth with high certainty, but its effect on survival was mixed, with low certainty. Site preparation is well studied, with high certainty, yet its effects on survival and growth were mixed. Combined treatments are reported separately: two increased growth, two had an unclear effect, and one showed no effect.",
+  "text": "Seedling size and the type of planting stock increased growth, with high certainty. The one survival study also found an increase, with low certainty. Adding fertilizer in the nursery had mixed effects on growth, with low certainty. No matching evidence was found for survival. Adding fertilizer at planting increased growth, with high certainty, but its effects on survival were mixed, with moderate certainty. Treating seedlings or soil with fungi or other microorganisms had mixed effects on survival and growth, with moderate certainty. More plants competing with seedlings reduced survival, with high certainty. Results for growth were mixed, with low certainty. Controlling competing plants increased growth, with high certainty, but results for survival were mixed, with low certainty. Preparing the site before planting had mixed effects on survival and growth, with high certainty. For combined treatments, two claims reported increased growth, two were unclear, and one reported no detected effect.",
   "sentences": [
     {
-      "text": "Seedling size and stock type treatments increased growth with high certainty; the single survival study also found an increase, with low certainty.",
+      "text": "Seedling size and the type of planting stock increased growth, with high certainty. The one survival study also found an increase, with low certainty.",
       "finding_ids": ["q1:seedling_size:growth", "q1:seedling_size:survival"],
       "gap_ids": []
     },
     {
-      "text": "Nursery fertilization had mixed effects on growth, with low certainty, and no included study measured its effect on survival.",
+      "text": "Adding fertilizer in the nursery had mixed effects on growth, with low certainty. No matching evidence was found for survival.",
       "finding_ids": ["q1:nursery_fertilization:growth"],
       "gap_ids": ["q1:nursery_fertilization:survival"]
     },
     {
-      "text": "Fertilization at planting, a separate practice, increased growth with high certainty, but its effect on survival was mixed, with moderate certainty.",
+      "text": "Adding fertilizer at planting increased growth, with high certainty, but its effects on survival were mixed, with moderate certainty.",
       "finding_ids": [
         "q1:fertilization_at_planting:growth",
         "q1:fertilization_at_planting:survival"
@@ -22,27 +22,27 @@
       "gap_ids": []
     },
     {
-      "text": "Mycorrhizal or soil inoculation had mixed effects on both survival and growth, with moderate certainty.",
+      "text": "Treating seedlings or soil with fungi or other microorganisms had mixed effects on survival and growth, with moderate certainty.",
       "finding_ids": ["q1:inoculation:survival", "q1:inoculation:growth"],
       "gap_ids": []
     },
     {
-      "text": "More competing vegetation decreased survival with high certainty; its effect on growth was mixed, with low certainty.",
+      "text": "More plants competing with seedlings reduced survival, with high certainty. Results for growth were mixed, with low certainty.",
       "finding_ids": ["q1:competing_vegetation:survival", "q1:competing_vegetation:growth"],
       "gap_ids": []
     },
     {
-      "text": "Vegetation control increased growth with high certainty, but its effect on survival was mixed, with low certainty.",
+      "text": "Controlling competing plants increased growth, with high certainty, but results for survival were mixed, with low certainty.",
       "finding_ids": ["q1:vegetation_control:growth", "q1:vegetation_control:survival"],
       "gap_ids": []
     },
     {
-      "text": "Site preparation is well studied, with high certainty, yet its effects on survival and growth were mixed.",
+      "text": "Preparing the site before planting had mixed effects on survival and growth, with high certainty.",
       "finding_ids": ["q1:site_preparation:survival", "q1:site_preparation:growth"],
       "gap_ids": []
     },
     {
-      "text": "Combined treatments are reported separately: two increased growth, two had an unclear effect, and one showed no effect.",
+      "text": "For combined treatments, two claims reported increased growth, two were unclear, and one reported no detected effect.",
       "finding_ids": [],
       "gap_ids": [],
       "interaction_ids": [

@@ -9,6 +9,7 @@ import {
 import { escapeHTML as e, normalizeQuestion, reducedMotion } from './ui.js'
 import { icon } from './icons.js'
 import { startTerrain } from './terrain.js'
+import { technicalTerms } from './terms.js'
 
 const shell = document.querySelector('#app'),
   main = document.querySelector('main')
@@ -16,6 +17,13 @@ const header = document.querySelector('#site-header'),
   historyPanel = document.querySelector('#history-panel')
 const dialog = document.querySelector('#info-dialog'),
   certaintyDialog = document.querySelector('#certainty-dialog')
+const termDialog = document.createElement('dialog')
+termDialog.id = 'term-dialog'
+termDialog.className = 'certainty-dialog'
+termDialog.setAttribute('aria-labelledby', 'term-heading')
+termDialog.innerHTML = `<div class="certainty-dialog-content"><button type="button" class="certainty-dialog-close" data-action="close-term" aria-label="Close term explanation">${icon('X', 20)}</button><h2 id="term-heading" tabindex="-1">Term explanation</h2><p data-term-definition></p></div>`
+document.body.append(termDialog)
+let termTrigger = null
 const launchHTML = main.innerHTML
 let questions = [],
   history = [],
@@ -64,7 +72,7 @@ function syncChrome() {
     historyPanel.innerHTML = `<div class="history-top"><button type="button" class="history-new" data-action="new-question">${icon('Plus', 16)} New question</button><button type="button" class="panel-toggle" data-action="hide-history" aria-label="Hide previous questions" aria-expanded="true" aria-controls="history-panel">${icon('SidebarSimple', 19)}</button></div><nav aria-label="Previous questions"><ul>${history.map((entry) => `<li><button type="button" data-history="${e(entry.key)}"${shown?.key === entry.key ? ' aria-current="page"' : ''} title="${e(questions.find((q) => q.id === entry.id).question)}">${e(entry.label)}</button></li>`).join('')}</ul></nav>`
 }
 function syncPause() {
-  terrain?.setPaused(dialog.open || certaintyDialog.open)
+  terrain?.setPaused(dialog.open || certaintyDialog.open || termDialog.open)
 }
 function showModal(kind, trigger) {
   modalTrigger = trigger
@@ -220,6 +228,17 @@ document.addEventListener('click', async (event) => {
   const button = event.target.closest('button')
   if (!button) return
   const action = button.dataset.action
+  if (button.dataset.term && technicalTerms[button.dataset.term]) {
+    const term = technicalTerms[button.dataset.term]
+    termTrigger = button
+    button.setAttribute('aria-expanded', 'true')
+    termDialog.querySelector('h2').textContent = term.name
+    termDialog.querySelector('[data-term-definition]').textContent = term.text
+    termDialog.showModal()
+    termDialog.querySelector('h2').focus()
+    syncPause()
+  }
+  if (action === 'close-term') termDialog.close()
   if (action === 'about') showModal('about', button)
   if (action === 'close-modal') dialog.close()
   if (action === 'close-certainty') certaintyDialog.close()
@@ -285,4 +304,12 @@ window.addEventListener('pageshow', (event) => {
   if (event.persisted) syncPause()
 })
 questionsReady.catch(showStartupError)
+termDialog.addEventListener('click', (event) => {
+  if (event.target === termDialog) termDialog.close()
+})
+termDialog.addEventListener('close', () => {
+  termTrigger?.setAttribute('aria-expanded', 'false')
+  if (termTrigger?.isConnected) termTrigger.focus({ preventScroll: true })
+  syncPause()
+})
 fillIcons()

@@ -1,3 +1,4 @@
+import { labelWithTerms } from './terms.js'
 import { icon } from './icons.js'
 import {
   certaintyLabel,
@@ -56,14 +57,14 @@ export function renderMatrix(answer, graph) {
   const outcomes = uniqueLabels(results, 'outcome', graph?.nodes)
   const groups = groupByKind(uniqueLabels(results, 'subject', graph?.nodes), graph?.nodes)
   return `<div class="matrix" role="table" aria-labelledby="glance-title">
-    <div class="matrix-head" role="row"><span role="columnheader"><span class="sr-only">Practice</span></span>${outcomes.map((outcome) => `<span role="columnheader">${e(outcome.label)}</span>`).join('')}</div>
+    <div class="matrix-head" role="row"><span role="columnheader"><span class="sr-only">Practice</span></span>${outcomes.map((outcome) => `<span role="columnheader">${labelWithTerms(outcome.label)}</span>`).join('')}</div>
     ${groups
       .map(
         (group) =>
           `<div class="matrix-group" role="rowgroup">${groups.length > 1 && group.label ? `<div class="matrix-group-label" role="row"><span role="rowheader">${e(group.label)}</span></div>` : ''}${group.items
             .map(
               (subject) =>
-                `<div class="matrix-row" role="row"><span role="rowheader" class="matrix-practice">${e(subject.label)}</span>${outcomes
+                `<div class="matrix-row" role="row"><span role="rowheader" class="matrix-practice">${labelWithTerms(subject.label)}</span>${outcomes
                   .map((outcome) => {
                     const result = results.find(
                       (item) => item.subject.id === subject.id && item.outcome.id === outcome.id,
@@ -97,7 +98,7 @@ export function renderFindingRow(finding) {
       ? 'No clear evidence of change'
       : directionLabel(finding.direction)
   return `<li class="finding-row" ${linked(finding.id)}><button type="button" class="finding-open" ${opener(finding.id)} aria-label="${e(`View evidence: ${finding.outcome.label}, ${label}, ${certaintyLabel(finding.certainty)} certainty, ${studyCount(finding.studies)}`)}"></button>
-    <span class="finding-name">${e(finding.outcome.label)}${finding.lags ? '<span class="tag">Lags</span>' : ''}</span>${direction(finding.direction, label)}${certainty(finding)}<span class="finding-studies">${studyCount(finding.studies)}</span>
+    <span class="finding-name">${labelWithTerms(finding.outcome.label)}${finding.lags ? '<span class="tag">Lags</span>' : ''}</span>${direction(finding.direction, label)}${certainty(finding)}<span class="finding-studies">${studyCount(finding.studies)}</span>
     ${hasBreakdown(finding) || ages ? `<span class="finding-extra">${ages}${hasBreakdown(finding) ? `<span>${e(studyBreakdown(finding))}</span>` : ''}</span>` : ''}</li>`
 }
 
@@ -129,10 +130,10 @@ export function renderCoverage(answer) {
   return `<section class="glance gap-map-section" aria-labelledby="map-title">${viewSwitch('Map')}<h2 id="map-title">Evidence map</h2><p class="section-hint" data-findings-hint>See where evidence is concentrated and where this map has gaps.</p><div data-table><div class="coverage">
     <p><strong>${summary.filled}</strong> of ${summary.cells} combinations studied · <strong>${summary.thin}</strong> by a single study · <strong>${summary.empty}</strong> with no mapped evidence</p>
     <span class="map-legend" aria-hidden="true"><i class="d-thin"></i>1 study<i class="d-some"></i>2–3<i class="d-dense"></i>4+<i class="d-gap"></i><span title="${e(mappedGapNote)}">No mapped evidence</span><i class="d-densest"></i>${densest.size} most studied</span></div>
-    <div class="gap-map-scroll"><table class="gap-map"><thead><tr><td></td>${columns.map((c) => `<th scope="col"><span title="${e(c.label)}">${e(c.label)}</span></th>`).join('')}</tr></thead><tbody>${rows
+    <div class="gap-map-scroll"><table class="gap-map"><thead><tr><td></td>${columns.map((c) => `<th scope="col"><span title="${e(c.label)}">${labelWithTerms(c.label)}</span></th>`).join('')}</tr></thead><tbody>${rows
       .map(
         (row) =>
-          `<tr><th scope="row">${e(row.label)}</th>${columns
+          `<tr><th scope="row">${labelWithTerms(row.label)}</th>${columns
             .map((c) => {
               const f = lookup.get(`${row.id}|${c.id}`)
               if (!f || !isFinding(f))

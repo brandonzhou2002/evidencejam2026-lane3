@@ -1854,6 +1854,38 @@ h1.answer-question:focus {
   color: #a9bfb2;
   vertical-align: middle;
 }
+.term-info {
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  pointer-events: auto;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-inline-start: 4px;
+  padding: 0;
+  border: 1px solid #455e50;
+  border-radius: 50%;
+  background: transparent;
+  color: #a6bcae;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  vertical-align: middle;
+}
+.term-info::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+}
+.term-info:hover,
+.term-info[aria-expanded='true'] {
+  color: var(--mint);
+  border-color: var(--mint);
+  background: #a4edc80d;
+}
 .certainty-info:hover {
   color: var(--mint);
   background: #a4edc812;

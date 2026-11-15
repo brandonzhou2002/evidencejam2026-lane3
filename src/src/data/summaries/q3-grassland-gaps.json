@@ -1,15 +1,15 @@
 {
   "id": "q3-grassland-gaps",
   "question": "For grassland restoration in Canada, which intervention-outcome combinations have little or no evidence, and where is the graph densest?",
-  "text": "Of the 384 intervention and outcome pairings in the grassland evidence map below, 123 have at least one study, 72 of them only one, and 261 have no mapped evidence. Five interventions have no mapped evidence for any outcome: timber harvest, livestock grazing, hydrological restoration, predator and competitor control, and passive recovery. Invasive plant removal, irrigation, erosion structures and mine reclamation each have mapped evidence for only two outcomes. There is no mapped evidence for contaminants or animal behaviour; ecosystem processes are represented for only two interventions, and hydrology for one. The most studied pairings are seeding and herbicide for plant cover, with 9 studies each, and seeding for species richness, with 8. Eight more have 5 studies each: herbicide and mowing for richness and invasive species, mulch for plant cover and growth, organic amendments for soil chemistry, and seeding for abundance. Study counts show research effort, not whether a practice works.",
+  "text": "The grassland evidence map below covers 384 combinations of restoration practices and outcomes. Of these, 123 have at least one study; 72 of those have only one. The other 261 have no mapped evidence. Five practices have no mapped evidence for any outcome: timber harvest, livestock grazing, restoring water flow and levels, controlling predators and competitors, and allowing recovery without active treatment. Removing invasive plants, irrigation, building structures to control erosion and restoring mined land each have mapped evidence for only two outcomes. The map has no evidence for pollutants or animal behaviour. How ecosystems function has been studied for only two practices, and changes to water flow or landforms for one. The most studied combinations are seeding and herbicide use for plant cover, with 9 studies each, and seeding for the number of species, with 8. Eight more combinations have 5 studies each: herbicide use and mowing for the number of species and numbers of invasive organisms, mulch for plant cover and growth, organic materials added to soil for soil chemistry, and seeding for numbers of plants and other organisms. Study counts show how much research is mapped here, not how well a practice works.",
   "sentences": [
     {
-      "text": "Of the 384 intervention and outcome pairings in the grassland evidence map below, 123 have at least one study, 72 of them only one, and 261 have no mapped evidence.",
+      "text": "The grassland evidence map below covers 384 combinations of restoration practices and outcomes. Of these, 123 have at least one study; 72 of those have only one. The other 261 have no mapped evidence.",
       "finding_ids": [],
       "gap_ids": []
     },
     {
-      "text": "Five interventions have no mapped evidence for any outcome: timber harvest, livestock grazing, hydrological restoration, predator and competitor control, and passive recovery.",
+      "text": "Five practices have no mapped evidence for any outcome: timber harvest, livestock grazing, restoring water flow and levels, controlling predators and competitors, and allowing recovery without active treatment.",
       "finding_ids": [],
       "gap_ids": [
         "q3:timber_harvest:invasive_abundance",
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "text": "Invasive plant removal, irrigation, erosion structures and mine reclamation each have mapped evidence for only two outcomes.",
+      "text": "Removing invasive plants, irrigation, building structures to control erosion and restoring mined land each have mapped evidence for only two outcomes.",
       "finding_ids": [
         "q3:invasive_removal:survival_mortality",
         "q3:invasive_removal:reproduction",
@@ -109,7 +109,7 @@
       "gap_ids": []
     },
     {
-      "text": "There is no mapped evidence for contaminants or animal behaviour; ecosystem processes are represented for only two interventions, and hydrology for one.",
+      "text": "The map has no evidence for pollutants or animal behaviour. How ecosystems function has been studied for only two practices, and changes to water flow or landforms for one.",
       "finding_ids": [
         "q3:planting:ecosystem_function",
         "q3:topsoil_transfer:ecosystem_function",
@@ -167,7 +167,7 @@
       ]
     },
     {
-      "text": "The most studied pairings are seeding and herbicide for plant cover, with 9 studies each, and seeding for species richness, with 8.",
+      "text": "The most studied combinations are seeding and herbicide use for plant cover, with 9 studies each, and seeding for the number of species, with 8.",
       "finding_ids": [
         "q3:seeding:plant_cover",
         "q3:herbicide:plant_cover",
@@ -176,7 +176,7 @@
       "gap_ids": []
     },
     {
-      "text": "Eight more have 5 studies each: herbicide and mowing for richness and invasive species, mulch for plant cover and growth, organic amendments for soil chemistry, and seeding for abundance.",
+      "text": "Eight more combinations have 5 studies each: herbicide use and mowing for the number of species and numbers of invasive organisms, mulch for plant cover and growth, organic materials added to soil for soil chemistry, and seeding for numbers of plants and other organisms.",
       "finding_ids": [
         "q3:herbicide:richness_diversity",
         "q3:herbicide:invasive_abundance",
@@ -190,7 +190,7 @@
       "gap_ids": []
     },
     {
-      "text": "Study counts show research effort, not whether a practice works.",
+      "text": "Study counts show how much research is mapped here, not how well a practice works.",
       "finding_ids": [],
       "gap_ids": []
     }

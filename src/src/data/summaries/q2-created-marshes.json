@@ -1,30 +1,30 @@
 {
   "id": "q2-created-marshes",
   "question": "How long do created marshes take to reach biodiversity and function comparable to natural reference wetlands, and which attributes lag?",
-  "text": "No included study reports how long a created marsh takes to match a natural one, and each comparison below is a snapshot at one age, not a recovery path. Created and restored marshes had lower growth, size and biomass than natural marshes, with high certainty. Species richness was lower in two of three studies, with moderate certainty. Plant cover and survival were also lower, but each rests on a single study, with very low and low certainty. Single studies found higher abundance and reproduction, mixed animal abundance and an unclear difference in community composition, all with very low certainty. As marshes aged, studies found no clear change in community composition, with moderate certainty, or in species richness and invasive species, with very low certainty. No included study compared created and natural marshes on ecosystem processes, hydrology, soil properties, soil and water chemistry, contaminants, plant establishment, animal behaviour or invasive species.",
+  "text": "The included studies do not tell us how long a created marsh takes to match a natural wetland. The comparisons below describe conditions at particular ages, not a full recovery timeline. Growth, size and the amount of living material were lower in created and restored marshes than in natural wetlands, with high certainty. Two of the three studies found fewer species, with moderate certainty. Plant cover and survival were also lower. Each finding came from one study, with very low certainty for plant cover and low certainty for survival. One study each found higher numbers of plants and other organisms, more reproduction, mixed results for animal numbers, and an unclear difference in which species were present and how common they were. All four findings had very low certainty. As marshes aged, studies found no clear change in which species were present and how common they were, with moderate certainty. They also found no clear change in the number of species or in how many invasive organisms were present, with very low certainty. No matching comparisons with natural wetlands were found for how ecosystems function, water flow or landforms, soil conditions, soil and water chemistry, pollutants, new plants becoming established, animal behaviour or invasive species.",
   "sentences": [
     {
-      "text": "No included study reports how long a created marsh takes to match a natural one, and each comparison below is a snapshot at one age, not a recovery path.",
+      "text": "The included studies do not tell us how long a created marsh takes to match a natural wetland. The comparisons below describe conditions at particular ages, not a full recovery timeline.",
       "finding_ids": [],
       "gap_ids": []
     },
     {
-      "text": "Created and restored marshes had lower growth, size and biomass than natural marshes, with high certainty.",
+      "text": "Growth, size and the amount of living material were lower in created and restored marshes than in natural wetlands, with high certainty.",
       "finding_ids": ["q2:created_marsh:growth_size"],
       "gap_ids": []
     },
     {
-      "text": "Species richness was lower in two of three studies, with moderate certainty.",
+      "text": "Two of the three studies found fewer species, with moderate certainty.",
       "finding_ids": ["q2:created_marsh:richness_diversity"],
       "gap_ids": []
     },
     {
-      "text": "Plant cover and survival were also lower, but each rests on a single study, with very low and low certainty.",
+      "text": "Plant cover and survival were also lower. Each finding came from one study, with very low certainty for plant cover and low certainty for survival.",
       "finding_ids": ["q2:created_marsh:plant_cover", "q2:created_marsh:survival_mortality"],
       "gap_ids": []
     },
     {
-      "text": "Single studies found higher abundance and reproduction, mixed animal abundance and an unclear difference in community composition, all with very low certainty.",
+      "text": "One study each found higher numbers of plants and other organisms, more reproduction, mixed results for animal numbers, and an unclear difference in which species were present and how common they were. All four findings had very low certainty.",
       "finding_ids": [
         "q2:created_marsh:abundance_density",
         "q2:created_marsh:reproduction",
@@ -34,7 +34,7 @@
       "gap_ids": []
     },
     {
-      "text": "As marshes aged, studies found no clear change in community composition, with moderate certainty, or in species richness and invasive species, with very low certainty.",
+      "text": "As marshes aged, studies found no clear change in which species were present and how common they were, with moderate certainty. They also found no clear change in the number of species or in how many invasive organisms were present, with very low certainty.",
       "finding_ids": [
         "q2:time_since_creation:community_composition",
         "q2:time_since_creation:richness_diversity",
@@ -43,7 +43,7 @@
       "gap_ids": []
     },
     {
-      "text": "No included study compared created and natural marshes on ecosystem processes, hydrology, soil properties, soil and water chemistry, contaminants, plant establishment, animal behaviour or invasive species.",
+      "text": "No matching comparisons with natural wetlands were found for how ecosystems function, water flow or landforms, soil conditions, soil and water chemistry, pollutants, new plants becoming established, animal behaviour or invasive species.",
       "finding_ids": [],
       "gap_ids": [
         "q2:created_marsh:behaviour_habitat_use",
