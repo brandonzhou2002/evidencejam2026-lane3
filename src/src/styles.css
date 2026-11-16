@@ -166,8 +166,8 @@ a:focus-visible {
 .walkthrough {
   position: fixed;
   z-index: 80;
-  width: min(340px, calc(100vw - 24px));
-  max-height: calc(100svh - 24px);
+  width: min(340px, calc(100vw - 48px));
+  max-height: calc(100svh - 48px);
   overflow-y: auto;
   padding: 22px;
   border: 1px solid #729d85;
@@ -1485,9 +1485,20 @@ h1.answer-question:focus {
   color: #e7efea;
 }
 .finding-studies {
-  font-size: 13px;
+  display: grid;
+  justify-items: center;
+  justify-self: end;
+  gap: 3px;
+  min-width: 40px;
+  font-size: 11px;
+  line-height: 1.2;
   color: #a9b9b0;
-  text-align: right;
+}
+.finding-studies strong {
+  font-size: 26px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+  color: #eef5f1;
 }
 .finding-extra {
   grid-column: 1 / -1;
@@ -1670,8 +1681,8 @@ h1.answer-question:focus {
   border-radius: 4px;
 }
 .map-gap.is-linked {
-  border-color: var(--mint);
-  box-shadow: none;
+  border-color: #ff80c8;
+  box-shadow: 0 0 0 1px #ff80c8 inset;
 }
 .map-cell {
   position: relative;
@@ -1710,12 +1721,41 @@ h1.answer-question:focus {
   outline-offset: 2px;
 }
 .map-cell.is-linked {
-  box-shadow: 0 0 0 1px var(--mint) inset;
+  z-index: 1;
+  outline: none;
+  box-shadow:
+    0 0 0 2px #ff80c8 inset,
+    0 0 0 3px #11221b inset;
 }
 .map-cell[aria-expanded='true'] {
+  z-index: 3;
+  outline: none;
   box-shadow:
-    0 0 0 2px var(--mint),
-    0 0 0 4px #0c1111;
+    0 0 0 3px #ff80c8 inset,
+    0 0 0 4px #11221b inset;
+}
+.map-selection-mark {
+  display: none;
+}
+.map-cell[aria-expanded='true'] .map-selection-mark {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  display: grid;
+  place-items: center;
+  width: 11px;
+  height: 11px;
+  border: 1px solid #11221b;
+  border-radius: 50%;
+  background: #ff80c8;
+  color: #11221b;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+}
+.gap-map tr:has(.map-cell[aria-expanded='true']) > th {
+  color: #ffb5df;
+  font-weight: 600;
 }
 .limitations {
   max-width: 900px;
@@ -2044,8 +2084,12 @@ h1.answer-question:focus {
   .finding-row .certainty {
     grid-column: 1;
   }
+  .finding-row > .direction {
+    grid-column: 1;
+  }
   .finding-studies {
-    text-align: right;
+    grid-column: 2;
+    grid-row: 1 / 4;
   }
 }
 

@@ -77,7 +77,12 @@ test('all three answers retain every evidence control and every summary link', (
     for (const f of [...answer.findings, ...(answer.with_time ?? [])]) {
       const cell = index === 0 ? renderResult(f) : index === 1 ? renderFindingRow(f) : html
       assert.ok(cell.includes(`data-open="${f.id}"`), f.id)
-      assert.ok(cell.includes(`${f.studies} ${f.studies === 1 ? 'study' : 'studies'}`), f.id)
+      assert.ok(
+        (index === 2 ? cell : cell.replace(/<[^>]+>/g, '')).includes(
+          `${f.studies} ${f.studies === 1 ? 'study' : 'studies'}`,
+        ),
+        f.id,
+      )
       assert.ok(
         cell.includes(f.certainty.replace('very_low', 'very low')) ||
           cell.toLowerCase().includes(`${f.certainty.replace('_', ' ')} certainty`),

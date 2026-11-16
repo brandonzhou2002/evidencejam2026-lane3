@@ -1,4 +1,5 @@
 import { icon } from './icons.js'
+import { reducedMotion } from './ui.js'
 
 let seen = false
 let tour = null
@@ -112,10 +113,13 @@ export function showWalkthrough(force = false, opener = null) {
       // Scroll when the highlighted control changes, including after async
       // graph/chart mounts replace the temporary fallback target.
       if (target && !target.matches('.selection-note'))
-        target.scrollIntoView?.({ block: 'center', behavior: 'instant' })
+        target.scrollIntoView?.({
+          block: 'center',
+          behavior: reducedMotion() ? 'instant' : 'smooth',
+        })
     }
     const rect = target?.getBoundingClientRect()
-    const padding = 12
+    const padding = 24
     const gap = target?.matches('.view-switch') ? 20 : padding
     const width = note.offsetWidth
     note.style.maxHeight = ''
@@ -154,6 +158,15 @@ export function showWalkthrough(force = false, opener = null) {
     }
     note.style.left = `${left}px`
     note.style.top = `${top}px`
+    const drawerAnimations = target?.closest('.evidence-drawer')?.getAnimations?.() ?? []
+    if (
+      drawerAnimations.some(
+        (animation) =>
+          animation.playState === 'running' &&
+          animation.effect?.getTiming().iterations !== Infinity,
+      )
+    )
+      schedulePosition()
   }
   function schedulePosition() {
     if (!frame) frame = requestAnimationFrame(position)
@@ -233,6 +246,8 @@ export function showWalkthrough(force = false, opener = null) {
     passive: true,
     signal: events.signal,
   })
+  article.addEventListener('animationend', schedulePosition, { signal: events.signal })
+  article.addEventListener('transitionend', schedulePosition, { signal: events.signal })
   const observer = new MutationObserver(() => {
     if (!article.isConnected) finish()
     else schedulePosition()

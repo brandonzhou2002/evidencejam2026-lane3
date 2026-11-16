@@ -104,7 +104,7 @@ export function renderFindingRow(finding) {
       ? 'No clear evidence of change'
       : directionLabel(finding.direction)
   return `<li class="finding-row" ${linked(finding.id)}><button type="button" class="finding-open" ${opener(finding.id)} aria-label="${e(`View evidence: ${finding.outcome.label}, ${label}, ${certaintyLabel(finding.certainty)} certainty, ${studyCount(finding.studies)}`)}"></button>
-    <span class="finding-name">${labelWithTerms(finding.outcome.label)}${finding.lags ? '<span class="tag">Lags</span>' : ''}</span>${direction(finding.direction, label)}${certainty(finding)}<span class="finding-studies">${studyCount(finding.studies)}</span>
+    <span class="finding-name">${labelWithTerms(finding.outcome.label)}${finding.lags ? '<span class="tag">Lags</span>' : ''}</span>${direction(finding.direction, label)}${certainty(finding)}<span class="finding-studies"><strong>${finding.studies}</strong> <span>${finding.studies === 1 ? 'study' : 'studies'}</span></span>
     ${hasBreakdown(finding) || ages ? `<span class="finding-extra">${ages}${hasBreakdown(finding) ? `<span>${e(studyBreakdown(finding))}</span>` : ''}</span>` : ''}</li>`
 }
 
@@ -143,7 +143,7 @@ export function renderCoverage(answer) {
               const f = lookup.get(`${row.id}|${c.id}`)
               if (!f || !isFinding(f))
                 return `<td class="map-gap"${f ? ` ${linked(f.id)}` : ''} title="${e(`${row.label} × ${c.label}: ${mappedGapNote}`)}"><span class="sr-only">No mapped evidence</span></td>`
-              return `<td><button type="button" ${opener(f.id)} class="map-cell d-${f.density}${densest.has(f.id) ? ' densest' : ''}" ${linked(f.id)} aria-label="${e(`${f.subject.label}, ${f.outcome.label}: ${studyCount(f.studies)}, ${directionLabel(f.direction)}, ${certaintyLabel(f.certainty)} certainty${densest.has(f.id) ? `, among the ${densest.size} most studied mapped pairings` : ''}`)}">${f.studies}${densest.has(f.id) ? '<span class="map-rank" aria-hidden="true">★</span>' : ''}</button></td>`
+              return `<td><button type="button" ${opener(f.id)} class="map-cell d-${f.density}${densest.has(f.id) ? ' densest' : ''}" ${linked(f.id)} aria-label="${e(`${f.subject.label}, ${f.outcome.label}: ${studyCount(f.studies)}, ${directionLabel(f.direction)}, ${certaintyLabel(f.certainty)} certainty${densest.has(f.id) ? `, among the ${densest.size} most studied mapped pairings` : ''}`)}">${f.studies}${densest.has(f.id) ? '<span class="map-rank" aria-hidden="true">★</span>' : ''}<span class="map-selection-mark" aria-hidden="true">✓</span></button></td>`
             })
             .join('')}</tr>`,
       )
