@@ -23,6 +23,7 @@ export function showWalkthrough(force = false, opener = null) {
       text: 'This box keeps your selected sentence in view. Close it with × to clear the highlights and return to the summary.',
       target: '.selection-note:not([hidden])',
       advance: '[data-clear-selection]',
+      preserveFindingScroll: true,
       prepare: () => {
         if (article.querySelector('.selection-note')?.hidden)
           article.querySelector('[data-sentence]')?.click()
@@ -193,7 +194,7 @@ export function showWalkthrough(force = false, opener = null) {
   }
   function render() {
     steps[step].prepare?.()
-    article.dispatchEvent(new Event('walkthrough-navigate'))
+    if (!steps[step].preserveFindingScroll) article.dispatchEvent(new Event('walkthrough-navigate'))
     note.innerHTML = `<button type="button" class="certainty-dialog-close" data-tour="close" aria-label="Close guide">${icon('X', 18)}</button><p class="walkthrough-progress">${step + 1} of ${steps.length}</p><h2 tabindex="-1">${steps[step].title}</h2><p class="walkthrough-description">${steps[step].text}</p><div class="walkthrough-actions"><button type="button" data-tour="${step ? 'back' : 'close'}">${step ? 'Back' : 'Skip'}</button><button type="button" class="walkthrough-next" data-tour="next">${step === steps.length - 1 ? 'Done' : 'Next'}${icon('ArrowRight', 16)}</button></div>`
     // Force a fresh target + scroll even if prepare only toggled a view.
     target?.classList.remove('walkthrough-target')
