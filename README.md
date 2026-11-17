@@ -1,4 +1,17 @@
-# Lane 3 — Decision Support
+# Understory — Restoration Evidence Explorer
+
+**Understory** is a frontend design project we built for Evidence Jam 2026.
+It helps people working in ecological restoration explore research on tree
+planting, wetland recovery, and grassland restoration in Canada. You can start
+with a short answer, explore the findings in tables, graphs, and charts, and
+read the quotes and papers behind them.
+
+The hackathon provided the evidence and three questions to build around, so
+we focused on how to present that information clearly. There’s no backend or
+live answer generation: only those three supported questions are available.
+If you enter another question, you can choose a supported one from the options.
+
+**[View the live website](https://evidencejam2026-lane3-random.vercel.app).**
 
 ## Confirmed issues in the supplied evidence pack
 
