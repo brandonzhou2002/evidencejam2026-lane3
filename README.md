@@ -11,7 +11,7 @@ we focused on how to present that information clearly. There’s no backend or
 live answer generation: only those three supported questions are available.
 If you enter another question, you can choose a supported one from the options.
 
-**[View the live website](https://evidencejam2026-lane3-random.vercel.app).**
+**[View the live website](https://brandonzhou2002.github.io/understory/).**
 
 ## Confirmed issues in the supplied evidence pack
 
