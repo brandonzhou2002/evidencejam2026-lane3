@@ -197,6 +197,11 @@ a:focus-visible {
   font-size: 13px;
   line-height: 1.6;
 }
+.walkthrough-inline-icon {
+  display: inline-flex;
+  vertical-align: -3px;
+  color: var(--mint);
+}
 .walkthrough-actions {
   display: flex;
   align-items: center;

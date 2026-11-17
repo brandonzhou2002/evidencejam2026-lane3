@@ -84,7 +84,7 @@ export function showWalkthrough(force = false, opener = null) {
     },
     {
       title: 'Get a quick explanation',
-      text: 'Select ⓘ beside a certainty rating to understand the grades, or ? beside a technical term for a short definition. You can replay this guide from How this works.',
+      text: `Select <span class="walkthrough-inline-icon" role="img" aria-label="the information icon">${icon('Info', 15)}</span> beside a certainty rating to understand the grades, or <span class="walkthrough-inline-icon" role="img" aria-label="the circled question mark">${icon('Question', 15)}</span> beside a technical term for a short definition. You can replay this guide from How this works.`,
       target: '.certainty-info, .term-info',
       fallback: '.view-switch',
       prepare: () => article.querySelector('[data-close-drawer]')?.click(),
